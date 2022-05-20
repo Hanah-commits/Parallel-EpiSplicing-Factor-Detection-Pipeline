@@ -1,0 +1,12 @@
+{
+"tissue1" : "",
+"tissue2" : "",
+"Histone modifications":["", ""],
+"RNASeq files":"/",
+"ChIPSeq files":"",
+"Reference genome":"",
+"threads":"",
+"MAJIQ config":"",
+"RBPmap directory" : "",
+"Pipeline output":""
+}
