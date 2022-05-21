@@ -1,6 +1,8 @@
 {
 "tissue1" : "",
+"tissue1 count" : "",
 "tissue2" : "",
+"tissue2_count": "",
 "Histone modifications":["", ""],
 "RNASeq files":"/",
 "ChIPSeq files":"",
