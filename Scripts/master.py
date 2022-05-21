@@ -5,10 +5,11 @@ import natsort
 import pathlib
 import json
 
-# TODO: MANorm, Feature Counts, prepare flank files
+# TODO: prepare flank files
 
 # STEP 0: Preprocessing
 exec(open("0_PreProcessing/featureCounts.py").read())
+os.system("Rscript 0_PreProcessing/Limma.R")
 
 
 # STEP 1: Execute MAJIQ - Differential Exon Usage
