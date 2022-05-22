@@ -35,7 +35,7 @@ if __name__ == "__main__":
       all_files = []
       for file in os.listdir(build_output):
             if file.endswith(".majiq"):
-                  all_files.append(os.path.join(output, file))
+                  all_files.append(os.path.join(build_output, file))
 
       tissue1_files = [file for file in all_files if tissue1 in file]
       tissue2_files = [file for file in all_files if tissue2 in file]
