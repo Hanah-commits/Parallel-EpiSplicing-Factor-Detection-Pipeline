@@ -13,7 +13,11 @@ if __name__ == "__main__":
 
     currdir = os.getcwd()
     opdir = currdir + '/../Input_Files/MANorm'
+
+    os.chdir(manorm_files)
    
     for hm in hms:
 
         os.system('manorm --p1 ' + hm + '_'+tissue1+'_peak.bed --p2 ' + hm + '_'+tissue2+'_peak.bed --r1 ' + hm + '_'+tissue1+'_alignment.bed --r2 ' + hm + '_'+tissue2+'_alignment.bed -o ' + opdir)
+
+    os.chdir(currdir)
