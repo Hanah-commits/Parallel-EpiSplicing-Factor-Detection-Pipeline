@@ -10,7 +10,7 @@ hms = d["Histone modifications"]
 
 for hm in hms:
     
-    input = hm + '_' + tissue1 + '_peak_vs_' + hm + '_' + tissue2 +  '_peak_all_MAvalues.xls'
+    input = '../Input_Files/MANorm/' + hm + '_' + tissue1 + '_peak_vs_' + hm + '_' + tissue2 +  '_peak_all_MAvalues.xls'
     output = '0_Files/' + hm + '_flanks.bed'
 
     os.system('bedtools intersect -loj -a 0_Files/filtered_flanks.bed -b ' + input + ' | sort | uniq > ' + output)
