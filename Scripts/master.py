@@ -1,15 +1,18 @@
 import os
+from PreProcessing.helperfunctions import check_args
 
-# TODO: prepare flank files
+# Check input arguments from paths.json
+args = check_args()
+
 
 # STEP 0: Preprocessing
 
 # Differential Expression Analysis
-exec(open("0_PreProcessing/featureCounts.py").read())
-os.system("Rscript 0_PreProcessing/Limma.R")
+exec(open("PreProcessing/featureCounts.py").read())
+os.system("Rscript PreProcessing/Limma.R")
 
 # Prepare flank reference : 50, 100, 200 bp
-exec(open("0_PreProcessing/prepare_FlanksRef.py").read())
+exec(open("PreProcessing/prepare_FlanksRef.py").read())
 
 # STEP 1: Execute MAJIQ - Differential Exon Usage
 os.system(("python 1_MAJIQ/runMAJIQ.py /../Input_Files/MAJIQ"))
