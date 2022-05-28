@@ -22,7 +22,7 @@ def check_args():
     }
 
     #check histone modifications & tissue names
-    if len(args["hms"] == 0):
+    if len(args["hms"]) == 0:
         raise ValueError('No Histone Modifications')
 
     if len(args["tissue1"].strip()) == 0 or len(args["tissue2"].strip()) == 0:
@@ -34,12 +34,20 @@ def check_args():
     except:
         raise ValueError('Invalid Input ' + args["threads"])
 
+
     # check path validity of directories
-    dir_paths = [args["bam_files"], args["chipseq_files"], args["rbpmap"]]
-    for path in dir_paths:
+
+    dirs = ["bam_files", "chipseq_files", "rbpmap"]
+    dir_paths = []
+    for dir in dirs:
+
+        if args[dir][-1] != '/':
+            args[dir] += '/'
+
+        dir_paths.append(args[dir])
         
-        if path[-1] != '/':
-            path = path + '/'
+
+    for path in dir_paths:
         
         if not os.path.exists(os.path.dirname(path)):
             raise ValueError('Path does not exist ' + path)
@@ -54,4 +62,3 @@ def check_args():
 
     return args
 
-    
