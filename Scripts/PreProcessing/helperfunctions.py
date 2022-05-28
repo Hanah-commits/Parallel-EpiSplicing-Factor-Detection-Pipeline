@@ -60,5 +60,6 @@ def check_args():
             raise ValueError('File does not exist ' + file)
 
 
-    return args
+    with open('paths.json', 'w') as fp:
+        json.dump(args, fp)
 
