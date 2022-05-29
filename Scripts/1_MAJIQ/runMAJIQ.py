@@ -49,8 +49,8 @@ if __name__ == "__main__":
       tissue2_files = " ".join(tissue2_files)
 
       # Quantify Splice Variation
-      os.system('majiq psi' + tissue1_files + ' -j '+ str(tissue1_count) + ' -o '+ tissue1_output + ' -n ' + tissue1)
-      os.system('majiq psi'+ tissue2_files + ' -j '+ str(tissue2_count) + ' -o '+ tissue2_output + ' -n ' + tissue2)
+      os.system('majiq psi ' + tissue1_files + ' -j '+ str(tissue1_count) + ' -o '+ tissue1_output + ' -n ' + tissue1)
+      os.system('majiq psi '+ tissue2_files + ' -j '+ str(tissue2_count) + ' -o '+ tissue2_output + ' -n ' + tissue2)
 
       # Quantify Differential Splice Variation
       os.system('majiq deltapsi -grp1 ' + tissue1_files + ' -grp2 ' + tissue2_files + ' -j ' + threads + ' -o ' + deltapsi_output + ' -n ' + tissue1 + ' ' + tissue2)
