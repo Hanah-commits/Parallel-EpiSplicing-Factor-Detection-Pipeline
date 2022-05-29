@@ -20,12 +20,14 @@ if __name__ == "__main__":
       currdir = os.getcwd()
       
       output = sys.argv[1] + 'MAJIQ'
-      Path(output).mkdir(parents=True, exist_ok=True)
-
       build_output = output+'/build'
       tissue1_output = output+'/psi_tissue1'
       tissue2_output = output+'/psi_tissue2'
       deltapsi_output = output+ '/deltapsi'
+
+      dirs = [output, build_output, tissue1_output, tissue2_output, deltapsi_output]
+      for dir in dirs:
+            Path(dir).mkdir(parents=True, exist_ok=True)
 
       # switch to the directory with the bam files
       os.chdir(majiq_files)
@@ -37,10 +39,11 @@ if __name__ == "__main__":
       all_files = []
       for file in os.listdir(build_output):
             if file.endswith(".majiq"):
-                  all_files.append(os.path.join(build_output, file))
+                  all_files.append(file)      
 
-      tissue1_files = [file for file in all_files if tissue1 in file]
-      tissue2_files = [file for file in all_files if tissue2 in file]
+      tissue1_files = [os.path.join(build_output, file) for file in all_files if tissue1 in file]
+      tissue2_files = [os.path.join(build_output, file) for file in all_files if tissue2 in file]
+
 
       tissue1_count = len(tissue1_files)
       tissue2_count = len(tissue2_files)
