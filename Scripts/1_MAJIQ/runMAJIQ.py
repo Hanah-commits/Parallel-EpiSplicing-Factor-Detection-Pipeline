@@ -58,12 +58,11 @@ if __name__ == "__main__":
       # Quantify Differential Splice Variation
       os.system('majiq deltapsi -grp1 ' + tissue1_files + ' -grp2 ' + tissue2_files + ' -j ' + threads + ' -o ' + deltapsi_output + ' -n ' + tissue1 + ' ' + tissue2)
 
-      os.chdir(output+'/output')
+      os.chdir(currdir)
 
       # Obtain tsv file
-      os.system('voila tsv ' + build_output + '/splicegraph.sql ' + deltapsi_output + tissue1+'_'+tissue2 +'.deltapsi.voila' +' -f majiq_output')
+      os.system('voila tsv ' + build_output + '/splicegraph.sql ' + deltapsi_output + tissue1+'_'+tissue2 +'.deltapsi.voila' +' -f ' + output + '/majiq_output')
 
-      os.chdir(currdir)
 
 
 

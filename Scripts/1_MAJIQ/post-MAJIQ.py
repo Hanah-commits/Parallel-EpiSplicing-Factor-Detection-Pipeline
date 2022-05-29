@@ -6,7 +6,7 @@ import sys
 # STEP 1: Extract required columns and split individual dpsi values, their probabilities and junction coords
 
 # Keep relevant columns
-file = sys.argv[1]+'MAJIQ/output/majiq_output'
+file = sys.argv[1]+'MAJIQ/majiq_output'
 voila = pd.read_csv(file, delimiter='\t', skiprows=10)
 col_list = ['gene_id', 'lsv_id', 'seqid', 'mean_dpsi_per_lsv_junction', 'probability_changing', 'junctions_coords', 'num_exons', 'strand'] #, 'exons_coords']
 voila = voila[col_list]
