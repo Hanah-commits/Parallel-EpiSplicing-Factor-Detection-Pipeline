@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 flanks = pd.read_csv('0_Files/all_flanks.csv', delimiter='\t')
 epigene_flanks = pd.read_csv('0_Files/dPSI_Mval_epi.csv', delimiter='\t')
@@ -13,7 +14,7 @@ input_files = []
 n = 0
 i = 1
 while n < len(epi_flanks):
-        name = '../Input_Files/RBPmap/rbp_input_epi'+str(i)+'.csv'
+        name = '0_Files/rbp_input_epi'+str(i)+'.csv'
         input_files.append(name)
         if n+5000 <= len(epi_flanks):
                 epi_flanks[['seqid', 'flanks', 'strand']].iloc[n:n+5000].to_csv(name, index=False, sep=':', header=False)
@@ -27,7 +28,7 @@ while n < len(epi_flanks):
 n = 0
 i = 1
 while n < len(nonepi_flanks):
-        name = '../Input_Files/RBPmap/rbp_input_nonepi'+str(i)+'.csv'
+        name = '0_Files/rbp_input_nonepi'+str(i)+'.csv'
         input_files.append(name)
         if n+5000 <= len(nonepi_flanks):
                 nonepi_flanks[['seqid', 'flanks', 'strand']].iloc[n:n+5000].to_csv(name, index=False, sep=':', header=False)
@@ -41,7 +42,7 @@ while n < len(nonepi_flanks):
 epi_flanks[['gene_id', 'flanks']].to_csv('0_Files/query_flanks_epi.csv', sep='\t', index=False)
 nonepi_flanks[['gene_id', 'flanks']].to_csv('0_Files/query_flanks_nonepi.csv', sep='\t', index=False)
 
-
-with open('../Input_Files/RBPmap/input.txt', 'w') as f:
+input_files = [os.getcwd() + '/' + file for file in input_files]
+with open('0_Files/input.txt', 'w') as f:
     for item in input_files:
         f.write("%s\n" % item)

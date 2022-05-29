@@ -1,6 +1,6 @@
 import os
 import shutil
-from PreProcessing.helperfunctions import check_args
+from HelperFunctions.check_args import check_args
 
 # Check input arguments from paths.json
 output_dir = check_args()
@@ -42,8 +42,7 @@ exec(open("3_Episplicing/correlation.py").read())
 exec(open("4_RBPMap/pre-rbp.py").read())
 
 # STEP 10: Execute RBPmap
-# TODO
-# exec(open("4_RBPMap/run_rbpmap.py").read())
+exec(open("4_RBPMap/run_rbpmap.py").read())
 
 # STEP 11: Process RBPMap output
 exec(open("4_RBPMap/post-rbp.py").read())
@@ -65,3 +64,4 @@ os.system("python 5_Classification&Enrichment/enrichment.py " + output_dir)
 
 # STEP 15: Move files generated from current pipeline run to
 shutil.move('0_Files/', output_dir)
+shutil.move('../RBPmap/', output_dir)
