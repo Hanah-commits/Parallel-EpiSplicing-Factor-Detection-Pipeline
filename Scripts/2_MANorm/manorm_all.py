@@ -14,7 +14,7 @@ if __name__ == "__main__":
     tissue2 = d["tissue2"]
 
     currdir = os.getcwd()
-    opdir = sys.argv[1] + 'MANorm'
+    opdir = sys.argv[1] + 'MANorm/'
     Path(opdir).mkdir(parents=True, exist_ok=True)
 
     os.chdir(manorm_files)

@@ -19,11 +19,11 @@ if __name__ == "__main__":
 
       currdir = os.getcwd()
       
-      output = sys.argv[1] + 'MAJIQ'
-      build_output = output+'/build'
-      tissue1_output = output+'/psi_tissue1'
-      tissue2_output = output+'/psi_tissue2'
-      deltapsi_output = output+ '/deltapsi'
+      output = sys.argv[1] + 'MAJIQ/'
+      build_output = output+'/build/'
+      tissue1_output = output+'/psi_tissue1/'
+      tissue2_output = output+'/psi_tissue2/'
+      deltapsi_output = output+ '/deltapsi/'
 
       dirs = [output, build_output, tissue1_output, tissue2_output, deltapsi_output]
       for dir in dirs:

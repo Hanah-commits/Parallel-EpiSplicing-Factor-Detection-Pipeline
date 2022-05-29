@@ -1,7 +1,7 @@
 import pandas as pd
 import sys
 
-prefix = sys.argv[1] + 'MANorm/output/'
+prefix = sys.argv[1] + 'MANorm'
 peaksfiles = ['H3K4me3_flanks.bed', 'H3K27me3_flanks.bed', 'H3K9me3_flanks.bed', 'H3K27ac_flanks.bed']
 peak_dfs = []
 
