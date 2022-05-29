@@ -12,11 +12,7 @@ from sklearn.metrics import RocCurveDisplay
 def classifier(output_dir, method='LinearRegression', predictors='all', alpha=1.0, l1_ratio=0.5, folds=5):
 
     features = pd.read_csv('0_Files/all_features.csv', delimiter='\t')
-    sf = ['HNRNPL', 'HNRNPH1', 'HNRNPK', 'SFPQ', 'HNRNPA1', 'HNRNPA2B1', 'PTBP1', 'HNRNPF', 'HNRNPH2', 'HNRNPM', 'FUS',
-          'YBX1', 'PCBP1', 'HNRNPC', 'HuR', 'TARDBP', 'HNRNPU', 'PCBP2', 'SRSF9', 'SRSF1', 'SRSF7', 'U2AF2', 'SRSF10',
-          'SRSF2', 'RALY', 'MBNL1', 'RBM4', 'PABPN1', 'RBM3', 'TIA1', 'KHDRBS1', 'RBM28', 'PABPC1', 'RBM5', 'SART3',
-          'SNRNP70', 'FXR2', 'FXR1', 'ESRP2', 'HNRNPA1L2', 'ZNF638', 'SNRPA', 'RBM8A', 'FMR1', 'DAZAP1', 'RBM42',
-          'ZCRB1', 'KHDRBS3', 'QKI', 'KHDRBS2', 'ZC3H10', 'RBM24', 'RBFOX1', 'BRUNOL5', 'BRUNOL4', 'BRUNOL6']
+    sf = ['BRUNOL4', 'BRUNOL5', 'BRUNOL6', 'DAZAP1', 'ESRP2', 'FMR1', 'FUS', 'FXR1', 'FXR2', 'HNRNPA1', 'HNRNPA1L2', 'HNRNPA2B1', 'HNRNPC', 'HNRNPF', 'HNRNPH1', 'HNRNPH2', 'HNRNPK', 'HNRNPL', 'HNRNPM', 'HNRNPU', 'HuR', 'KHDRBS1', 'KHDRBS2', 'KHDRBS3', 'MBNL1', 'PABPC1', 'PABPN1', 'PCBP1', 'PCBP2', 'PTBP1', 'QKI', 'RALY', 'RBFOX1', 'RBM24', 'RBM28', 'RBM3', 'RBM4', 'RBM42', 'RBM5', 'RBM8A', 'SART3', 'SFPQ', 'SNRNP70', 'SNRPA', 'SRSF1', 'SRSF10', 'SRSF2', 'SRSF7', 'SRSF9', 'TARDBP', 'TIA1', 'U2AF2', 'YBX1', 'ZC3H10', 'ZCRB1', 'ZNF638']
 
     sf_data = features[sf]
 

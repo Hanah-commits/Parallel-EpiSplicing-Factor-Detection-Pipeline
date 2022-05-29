@@ -4,22 +4,7 @@ import os
 
 
 def process_results(result_dirs, type):
-    proteins = ['A1CF(Hs/Mm)', 'ANKHD1(Hs/Mm)', 'BRUNOL4(Hs/Mm)', 'BRUNOL5(Hs/Mm)', 'BRUNOL6(Hs/Mm)', 'CNOT4(Hs/Mm)',
-                'CPEB2(Hs/Mm)', 'CPEB4(Hs/Mm)', 'DAZAP1(Hs/Mm)', 'ENOX1(Hs/Mm)', 'ESRP2(Hs/Mm)', 'FMR1(Hs/Mm)',
-                'FUS(Hs/Mm)', 'FXR1(Hs/Mm)', 'FXR2(Hs/Mm)', 'G3BP2(Hs/Mm)', 'HNRNPA1(Hs/Mm)', 'HNRNPA1(Hs/Mm)',
-                'HNRNPA1(Hs/Mm)', 'HNRNPA1L2(Hs/Mm)', 'HNRNPA2B1(Hs/Mm)', 'HNRNPA2B1(Hs/Mm)', 'HNRNPA2B1(Hs/Mm)',
-                'HNRNPC(Hs/Mm)', 'HNRNPCL1(Hs/Mm)', 'HNRNPF(Hs/Mm)', 'HNRNPF(Hs/Mm)', 'HNRNPH1(Hs/Mm)',
-                'HNRNPH2(Hs/Mm)', 'HNRNPK(Hs/Mm)', 'HNRNPL(Hs/Mm)', 'HNRNPL(Hs/Mm)', 'HNRNPM(Hs/Mm)', 'HNRNPU(Hs/Mm)',
-                'HNRPLL(Hs/Mm)', 'HuR(Hs/Mm)', 'IGF2BP2(Hs/Mm)', 'IGF2BP3(Hs/Mm)', 'KHDRBS1(Hs/Mm)', 'KHDRBS2(Hs/Mm)',
-                'KHDRBS3(Hs/Mm)', 'LIN28A(Hs/Mm)', 'MATR3(Hs/Mm)', 'MBNL1(Hs/Mm)', 'MSI1(Hs/Mm)', 'PABPC1(Hs/Mm)',
-                'PABPC3(Hs/Mm)', 'PABPC4(Hs/Mm)', 'PABPC5(Hs/Mm)', 'PABPN1(Hs/Mm)', 'PCBP1(Hs/Mm)', 'PCBP2(Hs/Mm)',
-                'PPRC1(Hs/Mm)', 'PTBP1(Hs/Mm)', 'PUM2(Hs/Mm)', 'QKI(Hs/Mm)', 'RALY(Hs/Mm)', 'RBFOX1(Hs/Mm)',
-                'RBM24(Hs/Mm)', 'RBM28(Hs/Mm)', 'RBM3(Hs/Mm)', 'RBM4(Hs/Mm)', 'RBM41(Hs/Mm)', 'RBM42(Hs/Mm)',
-                'RBM45(Hs/Mm)', 'RBM46(Hs/Mm)', 'RBM5(Hs/Mm)', 'RBM6(Hs/Mm)', 'RBM8A(Hs/Mm)', 'RBMS1(Hs/Mm)',
-                'RBMS3(Hs/Mm)', 'SAMD4A(Hs/Mm)', 'SART3(Hs/Mm)', 'SFPQ(Hs/Mm)', 'SNRNP70(Hs/Mm)', 'SNRPA(Hs/Mm)',
-                'SRSF1(Hs/Mm)', 'SRSF10(Hs/Mm)', 'SRSF2(Hs/Mm)', 'SRSF7(Hs/Mm)', 'SRSF9(Hs/Mm)', 'SRSF9(Hs/Mm)',
-                'TARDBP(Hs/Mm)', 'TIA1(Hs/Mm)', 'TUT1(Hs/Mm)', 'U2AF2(Hs/Mm)', 'YBX1(Hs/Mm)', 'YBX2(Hs/Mm)',
-                'ZC3H10(Hs/Mm)', 'ZC3H14(Hs/Mm)', 'ZCRB1(Hs/Mm)', 'ZNF638(Hs/Mm)']
+    proteins = ['BRUNOL4(Hs/Mm)', 'BRUNOL5(Hs/Mm)', 'BRUNOL6(Hs/Mm)', 'DAZAP1(Hs/Mm)', 'ESRP2(Hs/Mm)', 'FMR1(Hs/Mm)', 'FUS(Hs/Mm)', 'FXR1(Hs/Mm)', 'FXR2(Hs/Mm)', 'HNRNPA1(Hs/Mm)', 'HNRNPA1L2(Hs/Mm)', 'HNRNPA2B1(Hs/Mm)', 'HNRNPC(Hs/Mm)', 'HNRNPF(Hs/Mm)', 'HNRNPH1(Hs/Mm)', 'HNRNPH2(Hs/Mm)', 'HNRNPK(Hs/Mm)', 'HNRNPL(Hs/Mm)', 'HNRNPM(Hs/Mm)', 'HNRNPU(Hs/Mm)', 'HuR(Hs/Mm)', 'KHDRBS1(Hs/Mm)', 'KHDRBS2(Hs/Mm)', 'KHDRBS3(Hs/Mm)', 'MBNL1(Hs/Mm)', 'PABPC1(Hs/Mm)', 'PABPN1(Hs/Mm)', 'PCBP1(Hs/Mm)', 'PCBP2(Hs/Mm)', 'PTBP1(Hs/Mm)', 'QKI(Hs/Mm)', 'RALY(Hs/Mm)', 'RBFOX1(Hs/Mm)', 'RBM24(Hs/Mm)', 'RBM28(Hs/Mm)', 'RBM3(Hs/Mm)', 'RBM4(Hs/Mm)', 'RBM42(Hs/Mm)', 'RBM5(Hs/Mm)', 'RBM8A(Hs/Mm)', 'SART3(Hs/Mm)', 'SFPQ(Hs/Mm)', 'SNRNP70(Hs/Mm)', 'SNRPA(Hs/Mm)', 'SRSF1(Hs/Mm)', 'SRSF10(Hs/Mm)', 'SRSF2(Hs/Mm)', 'SRSF7(Hs/Mm)', 'SRSF9(Hs/Mm)', 'TARDBP(Hs/Mm)', 'TIA1(Hs/Mm)', 'U2AF2(Hs/Mm)', 'YBX1(Hs/Mm)', 'ZC3H10(Hs/Mm)', 'ZCRB1(Hs/Mm)', 'ZNF638(Hs/Mm)']
     dfs_collection = []
 
     zscore_collection = []  # holds 'zscore_list(s)' of all flanks
@@ -122,12 +107,12 @@ def process_results(result_dirs, type):
 
 
 if __name__ == "__main__":
-    path = '../Input_Files/RBPmap'
+    path = '../RBPmap'
     results_dirs = [x[0] for x in os.walk(path)]
     epi_dirs = [p for p in results_dirs if 'resultsrbp_input_epi' in p]
     nonepi_dirs = [p for p in results_dirs if 'resultsrbp_input_nonepi' in p]
 
-    process_results(epi_dirs, 'epi')
+    # process_results(epi_dirs, 'epi')
     process_results(nonepi_dirs, 'nonepi')
 
     print('processed')

@@ -7,7 +7,7 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     rbp = pd.read_csv(filename2, delimiter=',')
 
     if not weighted: # TO DO: NAME RBP columns in post-rbp
-        rbp.columns = ['A1CF', 'ANKHD1', 'BRUNOL4', 'BRUNOL5', 'BRUNOL6', 'CNOT4', 'CPEB2', 'CPEB4', 'DAZAP1', 'ENOX1', 'ESRP2', 'FMR1', 'FUS', 'FXR1', 'FXR2', 'G3BP2', 'HNRNPA1', 'HNRNPA1', 'HNRNPA1', 'HNRNPA1L2', 'HNRNPA2B1', 'HNRNPA2B1', 'HNRNPA2B1', 'HNRNPC', 'HNRNPCL1', 'HNRNPF', 'HNRNPF', 'HNRNPH1', 'HNRNPH2', 'HNRNPK', 'HNRNPL', 'HNRNPL', 'HNRNPM', 'HNRNPU', 'HNRPLL', 'HuR', 'IGF2BP2', 'IGF2BP3', 'KHDRBS1', 'KHDRBS2', 'KHDRBS3', 'LIN28A', 'MATR3', 'MBNL1', 'MSI1', 'PABPC1', 'PABPC3', 'PABPC4', 'PABPC5', 'PABPN1', 'PCBP1', 'PCBP2', 'PPRC1', 'PTBP1', 'PUM2', 'QKI', 'RALY', 'RBFOX1', 'RBM24', 'RBM28', 'RBM3', 'RBM4', 'RBM41', 'RBM42', 'RBM45', 'RBM46', 'RBM5', 'RBM6', 'RBM8A', 'RBMS1', 'RBMS3', 'SAMD4A', 'SART3', 'SFPQ', 'SNRNP70', 'SNRPA', 'SRSF1', 'SRSF10', 'SRSF2', 'SRSF7', 'SRSF9', 'SRSF9', 'TARDBP', 'TIA1', 'TUT1', 'U2AF2', 'YBX1', 'YBX2', 'ZC3H10', 'ZC3H14', 'ZCRB1', 'ZNF638']
+        rbp.columns = ['BRUNOL4', 'BRUNOL5', 'BRUNOL6', 'DAZAP1', 'ESRP2', 'FMR1', 'FUS', 'FXR1', 'FXR2', 'HNRNPA1', 'HNRNPA1L2', 'HNRNPA2B1', 'HNRNPC', 'HNRNPF', 'HNRNPH1', 'HNRNPH2', 'HNRNPK', 'HNRNPL', 'HNRNPM', 'HNRNPU', 'HuR', 'KHDRBS1', 'KHDRBS2', 'KHDRBS3', 'MBNL1', 'PABPC1', 'PABPN1', 'PCBP1', 'PCBP2', 'PTBP1', 'QKI', 'RALY', 'RBFOX1', 'RBM24', 'RBM28', 'RBM3', 'RBM4', 'RBM42', 'RBM5', 'RBM8A', 'SART3', 'SFPQ', 'SNRNP70', 'SNRPA', 'SRSF1', 'SRSF10', 'SRSF2', 'SRSF7', 'SRSF9', 'TARDBP', 'TIA1', 'U2AF2', 'YBX1', 'ZC3H10', 'ZCRB1', 'ZNF638']
 
     flanks = pd.read_csv(filename3, delimiter='\t')
     rbp = pd.concat([flanks, rbp], axis=1)
