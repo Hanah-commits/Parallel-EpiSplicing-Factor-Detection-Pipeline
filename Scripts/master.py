@@ -15,10 +15,10 @@ os.system("Rscript PreProcessing/Limma.R")
 os.system("python PreProcessing/prepare_FlanksRef.py")
 
 # STEP 1: Execute MAJIQ - Differential Exon Usage
-os.system(("python 1_MAJIQ/runMAJIQ.py /../Input_Files/MAJIQ"))
+os.system(("python 1_MAJIQ/runMAJIQ.py " + output_dir))
 
 # STEP 2: Execute MANorm -  Differential Histone Modifications
-exec(open("2_MANorm/manorm_all.py").read())
+os.system("python 2_MANorm/manorm_all.py " + output_dir)
 
 # STEP 3: Process MAJIQ output
 exec(open("1_MAJIQ/post-MAJIQ.py").read())
