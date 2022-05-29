@@ -59,15 +59,15 @@ def check_args():
             raise ValueError('File does not exist ' + file)
 
     # create custome output directory tissue1_tissue2_timestamp
-    output_dir = "../Output/"+ args["tissue1"]+ "_" + args["tissue2"]+ "_" + str(time.time()) +"/"
+    output_dir = str(Path(os.getcwd()).parent.absolute()) + "/Output/"+ args["tissue1"]+ "_" + args["tissue2"]+ "_" + str(time.time()) +"/"
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     # create temp directories
     Path('0_Files/').mkdir(parents=True, exist_ok=True)
     Path('../RBPmap/').mkdir(parents=True, exist_ok=True)
 
+
     with open('paths.json', 'w') as fp:
         json.dump(args, fp)
 
     return output_dir
-
