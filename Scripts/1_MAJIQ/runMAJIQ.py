@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+from pathlib import Path
 
 if __name__ == "__main__":
 
@@ -17,8 +18,9 @@ if __name__ == "__main__":
 
 
       currdir = os.getcwd()
-      output = currdir + '/../Input_Files/MAJIQ'
-   
+      
+      output = sys.argv[1] + 'MAJIQ'
+      Path(output).mkdir(parents=True, exist_ok=True)
 
       build_output = output+'/build'
       tissue1_output = output+'/psi_tissue1'

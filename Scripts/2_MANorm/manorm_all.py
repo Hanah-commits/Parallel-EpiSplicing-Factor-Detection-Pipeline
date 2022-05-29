@@ -1,5 +1,7 @@
 import os
 import json
+import sys
+from pathlib import Path
 
 if __name__ == "__main__":
 
@@ -12,7 +14,8 @@ if __name__ == "__main__":
     tissue2 = d["tissue2"]
 
     currdir = os.getcwd()
-    opdir = currdir + '/../Input_Files/MANorm'
+    opdir = sys.argv[1] + 'MANorm'
+    Path(opdir).mkdir(parents=True, exist_ok=True)
 
     os.chdir(manorm_files)
    

@@ -1,9 +1,9 @@
 import os
+import shutil
 from PreProcessing.helperfunctions import check_args
 
 # Check input arguments from paths.json
-args = check_args()
-
+output_dir = check_args()
 
 # STEP 0: Preprocessing
 
@@ -12,7 +12,7 @@ exec(open("PreProcessing/featureCounts.py").read())
 os.system("Rscript PreProcessing/Limma.R")
 
 # Prepare flank reference : 50, 100, 200 bp
-exec(open("PreProcessing/prepare_FlanksRef.py").read())
+os.system("python PreProcessing/prepare_FlanksRef.py")
 
 # STEP 1: Execute MAJIQ - Differential Exon Usage
 os.system(("python 1_MAJIQ/runMAJIQ.py /../Input_Files/MAJIQ"))
@@ -58,7 +58,10 @@ exec(open("5_Classification & Enrichment/classifier_features.py").read())
 exec(open("5_Classification & Enrichment/rbp_pvals.py").read())
 
 # STEP 14: Binary Classification
-exec(open("5_Classification & Enrichment/classifier.py").read())
+os.system("python 5_Classification&Enrichment/classifier.py " + output_dir)
 
 # STEP 15: Enrichment
-exec(open("5_Classification & Enrichment/enrichment.py").read())
+os.system("python 5_Classification&Enrichment/enrichment.py " + output_dir)
+
+# STEP 15: Move files generated from current pipeline run to
+shutil.move('0_Files/', output_dir)

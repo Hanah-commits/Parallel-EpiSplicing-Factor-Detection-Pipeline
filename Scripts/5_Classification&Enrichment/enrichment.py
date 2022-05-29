@@ -1,5 +1,6 @@
 import pandas as pd
 import math
+import sys
 import matplotlib.pyplot as plt
 import numpy as np
 import pylab
@@ -71,7 +72,7 @@ def enrichment (filename):
     return [*rbp_pval][:10]
 
 
-def qqplot_interpolate(type, sfs, name):
+def qqplot_interpolate(type, sfs, name, output_dir):
 
     color = {
         'epi': 'g',
@@ -121,7 +122,7 @@ def qqplot_interpolate(type, sfs, name):
             i += 1
 
         # plt.show()
-        plt.savefig('../Output_Files/enrichedRBP_'+name+'.png')
+        plt.savefig(output_dir+'enrichedRBP_'+name+'.png')
 
     else:
 
@@ -166,8 +167,8 @@ if __name__ == "__main__":
         enriched[t] = most_impt
 
     inter = list(set(enriched[types[0]]) & set(enriched[types[1]]))
-    qqplot_interpolate(0, inter, name='Epi&NonEpi')
+    qqplot_interpolate(0, inter, name='Epi&NonEpi', output_dir=sys.argv[1])
 
     for k,v in enriched.items():
         enriched = [x for x in v if x not in inter]
-        qqplot_interpolate(0, enriched, name=k)
+        qqplot_interpolate(0, enriched, name=k, output_dir=sys.argv[1])

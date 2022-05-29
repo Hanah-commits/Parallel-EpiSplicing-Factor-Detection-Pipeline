@@ -1,6 +1,7 @@
-from ast import arg
+import time
 import os
 import json
+from pathlib import Path
 
 
 def check_args():
@@ -35,8 +36,7 @@ def check_args():
 
 
     # check path validity of directories
-
-    dirs = ["RNASeq files", "ChIPSeq_files", "RBPmap directory"]
+    dirs = ["RNASeq files", "ChIPSeq files", "RBPmap directory"]
     dir_paths = []
     for dir in dirs:
 
@@ -58,7 +58,16 @@ def check_args():
         if not os.path.isfile(file):
             raise ValueError('File does not exist ' + file)
 
+    # create custome output directory tissue1_tissue2_timestamp
+    output_dir = "../Output/"+ args["tissue1"]+ "_" + args["tissue2"]+ "_" + str(time.time()) +"/"
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+
+    # create temp directories
+    Path('0_Files/').mkdir(parents=True, exist_ok=True)
+    Path('../RBPmap/').mkdir(parents=True, exist_ok=True)
 
     with open('paths.json', 'w') as fp:
         json.dump(args, fp)
+
+    return output_dir
 

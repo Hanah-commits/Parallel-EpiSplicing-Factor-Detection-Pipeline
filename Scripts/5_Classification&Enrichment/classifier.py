@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import sys
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.utils import resample
@@ -8,7 +9,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import RocCurveDisplay
 
 
-def classifier(method='LinearRegression', predictors='all', alpha=1.0, l1_ratio=0.5, folds=5):
+def classifier(output_dir, method='LinearRegression', predictors='all', alpha=1.0, l1_ratio=0.5, folds=5):
 
     features = pd.read_csv('0_Files/all_features.csv', delimiter='\t')
     sf = ['HNRNPL', 'HNRNPH1', 'HNRNPK', 'SFPQ', 'HNRNPA1', 'HNRNPA2B1', 'PTBP1', 'HNRNPF', 'HNRNPH2', 'HNRNPM', 'FUS',
@@ -83,7 +84,7 @@ def classifier(method='LinearRegression', predictors='all', alpha=1.0, l1_ratio=
     ax = plt.gca()
     display = RocCurveDisplay.from_estimator(clf, X_test, y_test, ax=ax)
     display.plot()
-    plt.savefig('../Output_Files/ROC.png')
+    plt.savefig(output_dir +'ROC.png')
 
 
     feature_imp = pd.Series(clf.feature_importances_, index=feature_names).sort_values(ascending=False)
@@ -98,4 +99,4 @@ def classifier(method='LinearRegression', predictors='all', alpha=1.0, l1_ratio=
 
 
 if __name__ == "__main__":
-    classifier(predictors='sf')
+    classifier(predictors='sf', output_dir=sys.argv[1])
