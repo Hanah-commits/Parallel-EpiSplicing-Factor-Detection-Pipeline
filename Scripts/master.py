@@ -8,7 +8,7 @@ output_dir = check_args()
 
 #check command line arguments
 weights = False
-if len(sys.argv) > 0 and sys.argv[1] == "-w":
+if len(sys.argv) > 1 and sys.argv[1] == "-w":
     weights = True
 
 # STEP 0: Preprocessing
@@ -28,7 +28,7 @@ os.system("python 1_MAJIQ/runMAJIQ.py " + output_dir)
 os.system("python 2_MANorm/manorm_all.py " + output_dir)
 
 # STEP 3: Process MAJIQ output
-exec(open("1_MAJIQ/post-MAJIQ.py").read())
+os.system("python 1_MAJIQ/post_MAJIQ.py " + output_dir)
 
 # STEP 4: BEDTools - Annotate exon flanks with MAJIQ junctions
 exec(open("1_MAJIQ/annotate-MAJIQ.py").read())
