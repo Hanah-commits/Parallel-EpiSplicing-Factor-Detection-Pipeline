@@ -61,7 +61,7 @@ if __name__ == "__main__":
       os.chdir(currdir)
 
       # Obtain tsv file
-      os.system('voila tsv ' + build_output + '/splicegraph.sql ' + deltapsi_output + tissue1+'_'+tissue2 +'.deltapsi.voila' +' -f ' + output + '/majiq_output')
+      os.system('voila tsv ' + build_output + '/splicegraph.sql ' + deltapsi_output + tissue1+'-'+tissue2 +'.deltapsi.voila' +' -f ' + output + '/majiq_output')
 
 
 

@@ -28,7 +28,7 @@ os.system("python 1_MAJIQ/runMAJIQ.py " + output_dir)
 os.system("python 2_MANorm/manorm_all.py " + output_dir)
 
 # STEP 3: Process MAJIQ output
-os.system("python 1_MAJIQ/post_MAJIQ.py " + output_dir)
+os.system("python 1_MAJIQ/post-MAJIQ.py " + output_dir)
 
 # STEP 4: BEDTools - Annotate exon flanks with MAJIQ junctions
 exec(open("1_MAJIQ/annotate-MAJIQ.py").read())
@@ -37,10 +37,10 @@ exec(open("1_MAJIQ/annotate-MAJIQ.py").read())
 exec(open("1_MAJIQ/post-bedtools.py").read())
 
 # STEP 6: BEDTools - Annotate exon flanks with MANorm peaks
-exec(open("2_MANorm/annotate-MANorm.py").read())
+os.system('python 2_MANorm/annotate-MANorm.py ' + output_dir)
 
 # STEP 7: Process peak-annotated flanks
-exec(open("2_MANorm/post-manorm.py").read())
+os.system("python 2_MANorm/post-manorm.py " + output_dir)
 
 # STEP 8: DEU - DHM Correlation
 exec(open("3_Episplicing/correlation.py").read())
