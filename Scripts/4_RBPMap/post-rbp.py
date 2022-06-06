@@ -93,6 +93,9 @@ def process_results(result_dirs, type):
         except:
             pass
 
+    col_names = [p.split('(Hs/Mm)')[0] for p in proteins]
+    zscore_collection.insert(0, col_names)
+    pval_collection.insert(0,  col_names)
 
     with open("0_Files/FilteredZscores_" + type + ".csv", "w", newline="") as f:
         writer = csv.writer(f)
@@ -112,7 +115,7 @@ if __name__ == "__main__":
     epi_dirs = [p for p in results_dirs if 'resultsrbp_input_epi' in p]
     nonepi_dirs = [p for p in results_dirs if 'resultsrbp_input_nonepi' in p]
 
-    # process_results(epi_dirs, 'epi')
+    process_results(epi_dirs, 'epi')
     process_results(nonepi_dirs, 'nonepi')
 
     print('processed')

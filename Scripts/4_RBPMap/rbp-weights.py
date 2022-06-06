@@ -7,8 +7,7 @@ weights = weights.set_index('rbp').T.to_dict('list')  # {'TARDBP': [-15400.0],  
 types = ['epi', 'nonepi']
 for type in types:
     file = '0_Files/FilteredZscores_'+type+'.csv'
-    rbp_scores = pd.read_csv(file, delimiter=',', header=None)
-    rbp_scores.columns = proteins
+    rbp_scores = pd.read_csv(file, delimiter=',')
     rbp_scores = rbp_scores.loc[:, ~rbp_scores.columns.duplicated()]
     
     # drop_proteins = ['HNRPLL']
