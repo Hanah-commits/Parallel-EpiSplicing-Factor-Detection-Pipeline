@@ -1,5 +1,5 @@
 import os
-
+import json
 import pandas as pd
 import numpy as np
 from scipy.stats import pearsonr
@@ -94,6 +94,11 @@ def find_epigenes(df):
     return epi_genes
 
 
+with open('paths.json') as f:
+    d = json.load(f)
+
+hms = d["Histone modifications"]
+
 dPSI = pd.read_csv('0_Files/Filtered_dPSI.csv', delimiter='\t')
 peaks = pd.read_csv('0_Files/Filtered_MValues.csv', delimiter='\t')
 dPSI.drop_duplicates(inplace=True)
@@ -104,10 +109,11 @@ flanks = pd.merge(dPSI, peaks, how="outer")
 flanks = flanks[flanks.groupby('gene_id').gene_id.transform(len) > 2]
 
 # # FILTER 2: drop genes with dPSI values but no peak
-grouped = flanks[['gene_id', 'H3K4me3', 'H3K27me3', 'H3K9me3', 'H3K27ac']].groupby('gene_id')
+cols = ['gene_id'] + hms
+grouped = flanks[cols].groupby('gene_id')
 non_epi = []
 for gene, group in grouped:
-    if group[['H3K4me3', 'H3K27me3', 'H3K9me3', 'H3K27ac']].isnull().all().all():
+    if group[hms].isnull().all().all():
         non_epi.append(gene)
 
 filtered_flanks = flanks[~flanks['gene_id'].isin(non_epi)]
@@ -131,10 +137,10 @@ new_pvals.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=Tru
 # dropping p-values of hm-hm correlations
 new_pvals = new_pvals.iloc[::5, :]
 
-non_epi.extend(new_pvals[new_pvals[["H3K4me3", "H3K27me3", "H3K9me3", "H3K27ac"]].isna().all(1)].gene_id.values.tolist())
+non_epi.extend(new_pvals[new_pvals[hms].isna().all(1)].gene_id.values.tolist())
 
 # drop genes where no dPSI-HM correlations exist
-new_pvals.dropna(subset=["H3K4me3", "H3K27me3", "H3K9me3", "H3K27ac"], how='all', inplace=True)
+new_pvals.dropna(subset=hms, how='all', inplace=True)
 
 # cleanup
 new_pvals.reset_index(inplace=True)
