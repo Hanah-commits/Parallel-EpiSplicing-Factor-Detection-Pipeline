@@ -1,8 +1,14 @@
 import pandas as pd
 import sys
+import json
 
 prefix = sys.argv[1] + 'MANorm/'
-peaksfiles = ['H3K4me3_flanks.bed', 'H3K27me3_flanks.bed', 'H3K9me3_flanks.bed', 'H3K27ac_flanks.bed']
+
+with open('paths.json') as f:
+    d = json.load(f)
+
+hms = d["Histone modifications"]
+peaksfiles = [hm+'_flanks.bed' for hm in hms]
 peak_dfs = []
 
 flanks = pd.read_csv('0_Files/filtered_flanks.bed', delimiter='\t', header=None)
