@@ -25,7 +25,7 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     features.fillna(0, inplace=True)  # non-epigene flanks with no annotated peaks
     features['gene_id'] = features['gene_id'].str.split('.').str[0]  # ENSG00000116691.11 -> ENSG00000116691
 
-    names = pd.read_csv('0_Files/GeneID_Name.csv', delimiter='\t')
+    names = pd.read_csv('HelperFunctions/GeneID_Name.csv', delimiter='\t')
     names.columns = ['gene_id', 'gene']
     features = pd.merge(features, names, on='gene_id')
 
@@ -34,14 +34,14 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     cols = cols[-1:] + cols[:-1]
     features = features[cols]
 
-    features.to_csv('pvals_rbp' + name + '.csv', sep='\t', index=False)
+    features.to_csv('0_Files/pvals_rbp' + name + '.csv', sep='\t', index=False)
 
 
 if __name__ == "__main__":
 
     dPSI_Mval_files = ['0_Files/dPSI_Mval_epi.csv', '0_Files/dPSI_Mval_nonepi.csv']
     Zscore_files = ['0_Files/FilteredPvalues_epi.csv', '0_Files/FilteredPvalues_nonepi.csv']
-    query_files = ['0_Files/query_flanks_epi.csv', '0_Files/query_flanks_nonepi.csv']
+    query_files = ['../RBPmap/query_flanks_epi.csv', '../RBPmap/query_flanks_nonepi.csv']
 
     for i in range(len(query_files)):
         feature_matrix(dPSI_Mval_files[i], Zscore_files[i], query_files[i])

@@ -1,9 +1,14 @@
 import pandas as pd
+import sys
 
 prefix = '0_Files/'
 unscaled = ['features_epi.csv', 'features_nonepi.csv', 'all_features.csv']
 scaled = ['features_scaled_epi.csv', 'features_scaled_nonepi.csv', 'all_features_scaled.csv']
-types = [unscaled, scaled]
+
+if sys.argv[1] == 'True':
+    types = [unscaled, scaled]
+else:
+    types = [unscaled]
 
 for file_list in types:
     epi_features = pd.read_csv(prefix+file_list[0], delimiter='\t')

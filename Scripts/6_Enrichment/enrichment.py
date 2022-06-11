@@ -1,6 +1,7 @@
 import pandas as pd
 import math
 import sys
+import json
 import matplotlib.pyplot as plt
 import numpy as np
 import pylab
@@ -9,9 +10,14 @@ import operator
 epi = pd.read_csv('0_Files/features_epi.csv', delimiter='\t')
 nonepi = pd.read_csv('0_Files/features_nonepi.csv', delimiter='\t')
 
+with open('paths.json') as f:
+    d = json.load(f)
+
+hms = d["Histone modifications"]
+
 
 def adjust_pvalue(df):
-    pval_cols = df.columns.tolist()[1:]  # skipping gene-id column
+    pval_cols = df.columns.tolist()
     new_cols = []
     col_names = []
     for col in pval_cols:
@@ -52,8 +58,8 @@ def p_adjust_bh(p):
 
 def enrichment (filename):
     epi = pd.read_csv(filename, delimiter='\t')
-
-    epi.drop(['gene', 'flanks', 'mean_dpsi_per_lsv_junction', 'H3K27me3', 'H3K9me3', 'H3K27ac', 'H3K4me3'], axis = 1, inplace=True)
+    cols = ['gene', 'flanks', 'mean_dpsi_per_lsv_junction'] + hms
+    epi.drop(cols, axis = 1, inplace=True)
 
     epi = adjust_pvalue(epi)
 

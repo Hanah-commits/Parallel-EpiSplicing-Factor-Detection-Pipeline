@@ -1,6 +1,12 @@
 import pandas as pd
+import sys
 import matplotlib.pyplot as plt
 
+output_dir = sys.argv[1]
+if sys.argv[2] == 'True':
+    weights = True
+else:
+    weights = False
 
 def feature_matrix(filename1, filename2, filename3, weighted=False):
 
@@ -8,7 +14,7 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     features = pd.read_csv(prefix+filename1, delimiter='\t')
     rbp = pd.read_csv(prefix+filename2, delimiter=',')
 
-    flanks = pd.read_csv(prefix+filename3, delimiter='\t')
+    flanks = pd.read_csv('../RBPmap/'+filename3, delimiter='\t')
     rbp = pd.concat([flanks, rbp], axis=1)
 
     name = ''
@@ -21,7 +27,7 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     rbp = rbp.loc[:, ~rbp.columns.duplicated()]
 
     if weighted:
-        rbp.to_csv('0_Files/flanks_rbp_' + name + '.csv', sep='\t', index=False)
+        rbp.to_csv(output_dir+'/flanks_rbp_' + name + '.csv', sep='\t', index=False)
 
     cols = features.columns.tolist()
     cols.remove('gene_id')
@@ -29,7 +35,7 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     features.fillna(0, inplace=True)  # non-epigene flanks with no annotated peaks
     features['gene_id'] = features['gene_id'].str.split('.').str[0]  # ENSG00000116691.11 -> ENSG00000116691
 
-    names = pd.read_csv('0_Files/GeneID_Name.csv', delimiter='\t')
+    names = pd.read_csv('HelperFunctions/GeneID_Name.csv', delimiter='\t')
     names.columns = ['gene_id', 'gene']
     features = pd.merge(features, names, on='gene_id')
 
@@ -67,7 +73,6 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
 
 if __name__ == "__main__":
 
-
     dPSI_Mval_files = ['dPSI_Mval_epi.csv', 'dPSI_Mval_nonepi.csv']
     Zscore_files = ['FilteredZscores_epi.csv', 'FilteredZscores_nonepi.csv']
     logFCZscore_files = ['WeightedZscores_epi.csv', 'WeightedZscores_nonepi.csv']
@@ -76,8 +81,10 @@ if __name__ == "__main__":
     for i in range(len(query_files)):
         feature_matrix(dPSI_Mval_files[i], Zscore_files[i], query_files[i], weighted=False)
 
-    for i in range(len(query_files)):
-        feature_matrix(dPSI_Mval_files[i], logFCZscore_files[i], query_files[i], weighted=True)
+    if weights:
+        
+        for i in range(len(query_files)):
+            feature_matrix(dPSI_Mval_files[i], logFCZscore_files[i], query_files[i], weighted=True)
 
 
 

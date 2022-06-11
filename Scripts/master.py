@@ -107,7 +107,7 @@ except Exception as ex:
     sys.exit(1)
 
 try:    
-    exec(open("5_Classification&Enrichment/rbp_pvals.py").read())
+    exec(open("5_Classification/rbp_pvals.py").read())
 except Exception as ex:
     print(ex)
     sys.exit(1)
@@ -122,28 +122,27 @@ if weights:
 
 # STEP 13: Prep Feature Matrix
 try:
-    exec(open("5_Classification&Enrichment/features.py").read())
+    os.system("python 5_Classification/features.py " + output_dir + " " + str(weights))
 except Exception as ex:
     print(ex)
     sys.exit(1)
 
 try: 
-    exec(open("5_Classification&Enrichment/classifier_features.py").read())
+    os.system("python 5_Classification/classifier_features.py " + output_dir + " " + str(weights))
 except Exception as ex:
     print(ex)
     sys.exit(1)
 
-    
 # STEP 14: Binary Classification
 try:
-    os.system("python 5_Classification&Enrichment/classifier.py " + output_dir)
+    os.system("python 5_Classification/classifier.py " + output_dir)
 except Exception as ex:
     print(ex)
     sys.exit(1)
 
 # STEP 15: Enrichment
 try:
-    os.system("python 5_Classification&Enrichment/enrichment.py " + output_dir)
+    os.system("python 6_Enrichment/enrichment.py " + output_dir)
 except Exception as ex:
     print(ex)
     sys.exit(1)
