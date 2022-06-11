@@ -39,10 +39,10 @@ while n < len(nonepi_flanks):
         i += 1
 
 # # get flanks for feature matrix preparation step
-epi_flanks[['gene_id', 'flanks']].to_csv('0_Files/query_flanks_epi.csv', sep='\t', index=False)
-nonepi_flanks[['gene_id', 'flanks']].to_csv('0_Files/query_flanks_nonepi.csv', sep='\t', index=False)
+epi_flanks[['gene_id', 'flanks']].to_csv('../RBPmap/query_flanks_epi.csv', sep='\t', index=False)
+nonepi_flanks[['gene_id', 'flanks']].to_csv('../RBPmap/query_flanks_nonepi.csv', sep='\t', index=False)
 
 input_files = [os.getcwd() + '/' + file for file in input_files]
-with open('0_Files/input.txt', 'w') as f:
+with open('../RBPmap/input.txt', 'w') as f:
     for item in input_files:
         f.write("%s\n" % item)
