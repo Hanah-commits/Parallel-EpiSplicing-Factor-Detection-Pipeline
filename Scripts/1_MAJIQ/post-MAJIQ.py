@@ -12,6 +12,8 @@ col_list = ['gene_id', 'lsv_id', 'seqid', 'mean_dpsi_per_lsv_junction', 'probabi
 voila = voila[col_list]
 
 # FILTER 1: remove LSVs with 2 exons
+voila["num_exons"] = voila["num_exons"].replace('na' ,'0')
+voila["num_exons"] = pd.to_numeric(voila["num_exons"])
 voila = voila[voila['num_exons'] > 2]
 
 # split column values to multiple lines
