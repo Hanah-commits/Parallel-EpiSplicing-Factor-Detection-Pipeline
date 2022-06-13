@@ -23,11 +23,11 @@ def adjust_pvalue(df):
     for col in pval_cols:
 
         # get indices of null values
-        na_idx = df[df[col] == 1.0].index.tolist()
+        na_idx = df[df[col].isnull()].index.tolist()
 
         # adjust non-null p values
         pvals = df[col].values.tolist()
-        pvals = [x for x in pvals if x != 1]
+        pvals = [x for x in pvals if not math.isnan(x)]
         adj_pval = p_adjust_bh(pvals).tolist()
 
         # insert null at original indices
@@ -123,7 +123,7 @@ def qqplot_interpolate(type, sfs, name, output_dir):
 
             i += 1
 
-        # plt.show()
+         # plt.show()
         plt.savefig(output_dir+'enrichedRBP_'+name+'.png')
 
     else:
