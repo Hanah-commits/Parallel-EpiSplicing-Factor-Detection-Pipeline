@@ -1,2 +1,0 @@
-../Input_Files/RBPmap/rbp_input_epi1.csv
-../Input_Files/RBPmap/rbp_input_nonepi1.csv
