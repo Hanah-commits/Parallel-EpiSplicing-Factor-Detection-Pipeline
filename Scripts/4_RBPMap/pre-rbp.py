@@ -28,7 +28,7 @@ while n < len(epi_flanks):
 n = 0
 i = 1
 while n < len(nonepi_flanks):
-        name = '0_Files/rbp_input_nonepi'+str(i)+'.csv'
+        name = '../RBPmap/rbp_input_nonepi'+str(i)+'.csv'
         input_files.append(name)
         if n+5000 <= len(nonepi_flanks):
                 nonepi_flanks[['seqid', 'flanks', 'strand']].iloc[n:n+5000].to_csv(name, index=False, sep=':', header=False)
@@ -39,8 +39,8 @@ while n < len(nonepi_flanks):
         i += 1
 
 # # get flanks for feature matrix preparation step
-epi_flanks[['gene_id', 'flanks']].to_csv('../RBPmap/query_flanks_epi.csv', sep='\t', index=False)
-nonepi_flanks[['gene_id', 'flanks']].to_csv('../RBPmap/query_flanks_nonepi.csv', sep='\t', index=False)
+epi_flanks[['gene_id', 'flanks']].to_csv('0_Files/query_flanks_epi.csv', sep='\t', index=False)
+nonepi_flanks[['gene_id', 'flanks']].to_csv('0_Files/query_flanks_nonepi.csv', sep='\t', index=False)
 
 input_files = [os.getcwd() + '/' + file for file in input_files]
 with open('../RBPmap/input.txt', 'w') as f:

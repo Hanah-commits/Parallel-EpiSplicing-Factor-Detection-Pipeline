@@ -14,7 +14,7 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     features = pd.read_csv(prefix+filename1, delimiter='\t')
     rbp = pd.read_csv(prefix+filename2, delimiter=',')
 
-    flanks = pd.read_csv('../RBPmap/'+filename3, delimiter='\t')
+    flanks = pd.read_csv(prefix+filename3, delimiter='\t')
     rbp = pd.concat([flanks, rbp], axis=1)
 
     name = ''
