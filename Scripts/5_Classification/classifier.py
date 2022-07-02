@@ -140,9 +140,10 @@ def stratified_classifier(output_dir):
             r[k].append(d[k])
     gini_scores = reduce(lambda r, d: foo(r, d) or r, gini_scores, defaultdict(list))
     gini_scores = pd.DataFrame(gini_scores)
-    mean_gini = gini_scores.mean(axis=0)
+    mean_gini = gini_scores.mean(axis=0).sort_values(ascending=False)
     print('Gini Scores: ')
     print(mean_gini)
+    mean_gini.to_csv('0_Files/impt_features.csv', sep='\t')
     
 
     tprs = np.array(tprs)
