@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pylab
 import operator
+from scipy import stats
+
 
 epi = pd.read_csv('0_Files/features_epi.csv', delimiter='\t')
 nonepi = pd.read_csv('0_Files/features_nonepi.csv', delimiter='\t')
@@ -158,6 +160,36 @@ def qqplot_interpolate(type, sfs, name, output_dir):
         # pylab.show()
 
 
+def significane_test(test):
+
+    prob_dict = {}
+    sfs = ['BRUNOL4', 'BRUNOL5', 'BRUNOL6', 'DAZAP1', 'ESRP2', 'FMR1', 'FUS', 'FXR1', 'FXR2', 'HNRNPA1', 'HNRNPA1L2', 'HNRNPA2B1', 'HNRNPC', 'HNRNPF', 'HNRNPH1', 'HNRNPH2', 'HNRNPK', 'HNRNPL', 'HNRNPM', 'HNRNPU', 'HuR', 'KHDRBS1', 'KHDRBS2', 'KHDRBS3', 'MBNL1', 'PABPC1', 'PABPN1', 'PCBP1', 'PCBP2', 'PTBP1', 'QKI', 'RALY', 'RBFOX1', 'RBM24', 'RBM28', 'RBM3', 'RBM4', 'RBM42', 'RBM5', 'RBM8A', 'SART3', 'SFPQ', 'SNRNP70', 'SNRPA', 'SRSF1', 'SRSF10', 'SRSF2', 'SRSF7', 'SRSF9', 'TARDBP', 'TIA1', 'U2AF2', 'YBX1', 'ZC3H10', 'ZCRB1', 'ZNF638']
+
+    if test == 'binomial':
+        epi_pvals = pd.read_csv('0_Files/pvals_rbpepi.csv', delimiter='\t')[sfs]
+        epi_pvals = adjust_pvalue(epi_pvals)
+
+        p =0.5 #probability of success in one trial
+        n = len(epi) # number of trials
+        for sf in sfs:
+            k = epi_pvals[sf][epi_pvals[sf] < 0.01].count() #number of successes
+            prob = stats.binom.cdf(k, n, p)
+            prob_dict[sf] = prob
+
+    elif test == 'welch':
+
+        for sf in sfs:
+            prob = stats.ttest_ind(epi[sf], nonepi[sf], equal_var = False)
+            prob_dict[sf] = prob[1]
+    
+    elif test == 'mannwhitney':
+
+        for sf in sfs:
+            prob = stats.mannwhitneyu(epi[sf], nonepi[sf])
+            prob_dict[sf] = prob[1]
+
+    
+    print(prob_dict)
 
 
 if __name__ == "__main__":
