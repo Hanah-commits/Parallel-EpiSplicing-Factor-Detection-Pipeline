@@ -181,7 +181,7 @@ def qqplot_interpolate(type, sfs, name, output_dir):
 def significane_test(test):
 
     prob_dict = {}
-    sfs = ['BRUNOL4', 'BRUNOL5', 'BRUNOL6', 'DAZAP1', 'ESRP2', 'FMR1', 'FUS', 'FXR1', 'FXR2', 'HNRNPA1', 'HNRNPA1L2', 'HNRNPA2B1', 'HNRNPC', 'HNRNPF', 'HNRNPH1', 'HNRNPH2', 'HNRNPK', 'HNRNPL', 'HNRNPM', 'HNRNPU', 'HuR', 'KHDRBS1', 'KHDRBS2', 'KHDRBS3', 'MBNL1', 'PABPC1', 'PABPN1', 'PCBP1', 'PCBP2', 'PTBP1', 'QKI', 'RALY', 'RBFOX1', 'RBM24', 'RBM28', 'RBM3', 'RBM4', 'RBM42', 'RBM5', 'RBM8A', 'SART3', 'SFPQ', 'SNRNP70', 'SNRPA', 'SRSF1', 'SRSF10', 'SRSF2', 'SRSF7', 'SRSF9', 'TARDBP', 'TIA1', 'U2AF2', 'YBX1', 'ZC3H10', 'ZCRB1', 'ZNF638']
+    # sfs = ['BRUNOL4', 'BRUNOL5', 'BRUNOL6', 'DAZAP1', 'ESRP2', 'FMR1', 'FUS', 'FXR1', 'FXR2', 'HNRNPA1', 'HNRNPA1L2', 'HNRNPA2B1', 'HNRNPC', 'HNRNPF', 'HNRNPH1', 'HNRNPH2', 'HNRNPK', 'HNRNPL', 'HNRNPM', 'HNRNPU', 'HuR', 'KHDRBS1', 'KHDRBS2', 'KHDRBS3', 'MBNL1', 'PABPC1', 'PABPN1', 'PCBP1', 'PCBP2', 'QKI', 'RALY', 'RBFOX1', 'RBM24', 'RBM28', 'RBM3', 'RBM4', 'RBM42', 'RBM5', 'RBM8A', 'SART3', 'SFPQ', 'SNRNP70', 'SNRPA', 'SRSF1', 'SRSF10', 'SRSF2', 'SRSF7', 'SRSF9', 'TARDBP', 'TIA1', 'U2AF2', 'YBX1', 'ZC3H10', 'ZCRB1', 'ZNF638']
 
     if test == 'binomial':
         epi_pvals = pd.read_csv('0_Files/pvals_rbpepi.csv', delimiter='\t')[sfs]
@@ -192,22 +192,248 @@ def significane_test(test):
         for sf in sfs:
             k = epi_pvals[sf][epi_pvals[sf] < 0.01].count() #number of successes
             prob = stats.binom.cdf(k, n, p)
-            prob_dict[sf] = prob
+            prob_dict[sf] = 1- prob
+
+        for k,v in prob_dict.items():
+            if (v <0.05):
+                print(k) 
 
     elif test == 'welch':
 
+        enriched_epi = []
+        enriched_nonepi = []
+
         for sf in sfs:
-            prob = stats.ttest_ind(epi[sf], nonepi[sf], equal_var = False)
+            prob = stats.ttest_ind(epi[sf], nonepi[sf], equal_var = False, alternative='greater')
             prob_dict[sf] = prob[1]
-    
+            if prob[1] < 0.05 :
+                enriched_epi.append(sf)
+
+        for sf in sfs:
+            prob = stats.ttest_ind(nonepi[sf], epi[sf], equal_var = False, alternative='greater')
+            prob_dict[sf] = prob[1]
+            if prob[1] < 0.05 :
+                enriched_nonepi.append(sf)
+
+
     elif test == 'mannwhitney':
+
+        enriched_epi = []
+        enriched_nonepi = []
+
+        for sf in sfs:
+    
+            prob = prob = stats.mannwhitneyu(epi[sf],nonepi[sf], alternative='greater')
+            if prob[1] <= 0.05:
+                enriched_epi.append(sf)
+
+            prob = prob = stats.mannwhitneyu(nonepi[sf],epi[sf], alternative='greater')
+            if prob[1] <= 0.05:
+                enriched_nonepi.append(sf)
+
+
+    elif test == 'mannwhitney2':
 
         for sf in sfs:
             prob = stats.mannwhitneyu(epi[sf], nonepi[sf])
-            prob_dict[sf] = prob[1]
+            if prob[1] <= 0.05:
+                prob_dict[sf] = prob[1]
 
-    
-    print(prob_dict)
+        enriched_epi = []
+        enriched_nonepi = []
+        for k,v in prob_dict.items():
+            nonzero_epi = epi[epi[k]!=0][k]
+            nonzero_nonepi = nonepi[nonepi[k]!=0][k]
+
+            
+            prob = prob = stats.mannwhitneyu(nonzero_epi,nonzero_nonepi, alternative='greater')
+            if prob[1] <= 0.05:
+                enriched_epi.append(k)
+            else:
+                impt = False
+
+            prob = prob = stats.mannwhitneyu(nonzero_nonepi,nonzero_epi, alternative='greater')
+            if prob[1] <= 0.05:
+                enriched_nonepi.append(k)
+                impt = True
+
+    elif test == "exact":
+
+        enriched_epi = []
+        enriched_nonepi = []
+
+        for sf in sfs:
+
+            row1 = []
+            row2 = []
+
+            row1.append((epi[sf] != 0).sum())
+            row2.append((epi[sf] == 0).sum())
+
+            row1.append((nonepi[sf] != 0).sum())
+            row2.append((nonepi[sf] == 0).sum())
+
+
+            table = [row1, row2]
+
+            res = stats.barnard_exact(table, alternative='greater', pooled=False)
+            if res.pvalue <= 0.05:
+                enriched_epi.append(sf)
+                
+
+        for sf in sfs:
+            row1 = []
+            row2 = []
+
+            row1.append((nonepi[sf] != 0).sum())
+            row2.append((nonepi[sf] == 0).sum())
+
+            row1.append((epi[sf] != 0).sum())
+            row2.append((epi[sf] == 0).sum())
+
+
+            table = [row1, row2]
+
+            res = stats.barnard_exact(table, alternative='greater', pooled=False)
+            if res.pvalue <= 0.05:
+                enriched_nonepi.append(sf)
+
+    elif test == "fisher":
+
+        enriched_epi = []
+        enriched_nonepi = []
+
+        for sf in sfs:
+
+            row1 = []
+            row2 = []
+
+            row1.append((epi[sf] != 0).sum())
+            row2.append((epi[sf] == 0).sum())
+
+            row1.append((nonepi[sf] != 0).sum())
+            row2.append((nonepi[sf] == 0).sum())
+
+
+            table = [row1, row2]
+
+            res = stats.fisher_exact(table, alternative='greater')
+            if res[1] <= 0.05:
+                enriched_epi.append(sf)
+                
+
+        for sf in sfs:
+            row1 = []
+            row2 = []
+
+            row1.append((nonepi[sf] != 0).sum())
+            row2.append((nonepi[sf] == 0).sum())
+
+            row1.append((epi[sf] != 0).sum())
+            row2.append((epi[sf] == 0).sum())
+
+
+            table = [row1, row2]
+
+            res = stats.fisher_exact(table, alternative='greater')
+            if res[1] <= 0.05:
+                enriched_nonepi.append(sf)
+               
+    elif test == "gtest":
+        enriched_epi = []
+        enriched_nonepi = []
+
+        for sf in sfs:
+
+            row1 = []
+            row2 = []
+
+            row1.append((nonepi[sf] != 0).sum())
+            row2.append((nonepi[sf] == 0).sum())
+
+            row1.append((epi[sf] != 0).sum())
+            row2.append((epi[sf] == 0).sum())
+
+
+            table = [row1, row2]
+            chi, pvalue, dof, ex = stats.chi2_contingency(table, lambda_="log-likelihood")
+            
+            if pvalue <= 0.05:
+                enriched_nonepi.append(sf)
+
+
+            row1 = []
+            row2 = []
+
+            row1.append((epi[sf] != 0).sum())
+            row2.append((epi[sf] == 0).sum())
+
+            row1.append((nonepi[sf] != 0).sum())
+            row2.append((nonepi[sf] == 0).sum())
+
+
+            table = [row1, row2]
+            chi, pvalue, dof, ex = stats.chi2_contingency(table, lambda_="log-likelihood")
+            
+            if pvalue <= 0.05:
+                enriched_epi.append(sf)
+
+
+    elif test == "chi":
+
+        enriched_epi = []
+        enriched_nonepi = []
+
+        for sf in sfs:
+
+            row1 = []
+            row2 = []
+
+            row1.append((nonepi[sf] != 0).sum())
+            row1.append((nonepi[sf] == 0).sum())
+
+            row2.append((epi[sf] != 0).sum())
+            row2.append((epi[sf] == 0).sum())
+
+
+            table = [row1, row2]
+            chi, pvalue, dof, ex = stats.chi2_contingency(table, correction=True)
+            
+
+            if pvalue <= 0.05:
+                    enriched_nonepi.append(sf)
+            
+
+            row1 = []
+            row2 = []
+
+            row1.append((epi[sf] != 0).sum())
+            row2.append((epi[sf] == 0).sum())
+
+            row1.append((nonepi[sf] != 0).sum())
+            row2.append((nonepi[sf] == 0).sum())
+
+
+            table = [row1, row2]
+            chi, pvalue, dof, ex = stats.chi2_contingency(table)
+            
+            if pvalue <= 0.05:
+                enriched_epi.append(sf)
+
+    print(test)
+    print('RBPS enriched in epigene flanks: ' ,len(enriched_epi))
+    print('RBPs enriched in non-epigene flanks ', len(enriched_nonepi))
+    print('###############################')
+
+    with open('0_Files/enriched_epi.txt', 'w') as f:
+        for rbp in enriched_epi:
+            f.write(f"{rbp}\n")
+
+    with open('0_Files/enriched_nonepi.txt', 'w') as f:
+        for rbp in enriched_nonepi:
+            f.write(f"{rbp}\n")
+            
+    return enriched_epi, enriched_nonepi
 
 
 if __name__ == "__main__":
