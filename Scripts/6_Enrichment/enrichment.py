@@ -3,6 +3,7 @@ import math
 import sys
 import json
 import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
 import pylab
 import operator
@@ -11,6 +12,23 @@ from scipy import stats
 
 epi = pd.read_csv('0_Files/features_epi.csv', delimiter='\t')
 nonepi = pd.read_csv('0_Files/features_nonepi.csv', delimiter='\t')
+
+epi["label"] = "epi"
+nonepi["label"] = "nonepi"
+
+sfs = pd.read_csv('0_Files/impt_features.csv', delimiter='\t')['Unnamed: 0'].values.tolist()
+
+# RBPs with no binding site in any flank
+all_zero = []
+for column in epi:  # iterates by-name
+    if epi[column].isna().all() or (epi[column] == 0).all():
+        all_zero.append(column)
+
+for column in nonepi:  # iterates by-name
+    if nonepi[column].isna().all() or (nonepi[column] == 0).all():
+        all_zero.append(column)
+
+sfs = [sf for sf in sfs if sf not in all_zero]
 
 with open('paths.json') as f:
     d = json.load(f)
