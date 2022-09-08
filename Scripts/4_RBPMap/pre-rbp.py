@@ -14,7 +14,7 @@ input_files = []
 n = 0
 i = 1
 while n < len(epi_flanks):
-        name = '0_Files/rbp_input_epi'+str(i)+'.csv'
+        name = '../RBPmap/rbp_input_epi'+str(i)+'.csv'
         input_files.append(name)
         if n+5000 <= len(epi_flanks):
                 epi_flanks[['seqid', 'flanks', 'strand']].iloc[n:n+5000].to_csv(name, index=False, sep=':', header=False)
