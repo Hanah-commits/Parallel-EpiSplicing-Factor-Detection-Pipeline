@@ -137,8 +137,6 @@ new_pvals.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=Tru
 # dropping p-values of hm-hm correlations
 new_pvals = new_pvals.iloc[::5, :]
 
-non_epi.extend(new_pvals[new_pvals[hms].isna().all(1)].gene_id.values.tolist())
-
 # drop genes where no dPSI-HM correlations exist
 new_pvals.dropna(subset=hms, how='all', inplace=True)
 
