@@ -126,12 +126,18 @@ def stratified_classifier(output_dir):
         fpr, tpr, _ = roc_curve(y[test], y_score[:, 1])
         roc_auc = metrics.auc(fpr, tpr)
         aucs.append(roc_auc)
+
+    # obtain range of AUCs
+    auc_range = np.percentile(aucs, (2.5, 97.5))
+    ci = float("%.2f" % (auc_range[1] - auc_range[0]))
+    mean_auc = "%.2f" % (auc_range[1] - ci)
+
     
-        plt.plot(fpr, tpr, 'b', alpha=0.15)
-        tpr = np.interp(base_fpr, fpr, tpr)
-        tpr[0] = 0.0
-        tprs.append(tpr)
-        gini_scores.append(dict(zip(sf,model.feature_importances_)))
+    plt.plot(fpr, tpr, 'b', alpha=0.15)
+    tpr = np.interp(base_fpr, fpr, tpr)
+    tpr[0] = 0.0
+    tprs.append(tpr)
+    gini_scores.append(dict(zip(sf,model.feature_importances_)))
 
     
     # mean gini_impurity across all folds
@@ -149,13 +155,13 @@ def stratified_classifier(output_dir):
     tprs = np.array(tprs)
     mean_tprs = tprs.mean(axis=0)
     std = tprs.std(axis=0)
-    aucs = np.array(aucs)
-    mean_auc = aucs.mean(axis=0)
+    # aucs = np.array(aucs)
+    # mean_auc = aucs.mean(axis=0)
 
     tprs_upper = np.minimum(mean_tprs + std, 1)
     tprs_lower = mean_tprs - std
 
-    plt.plot(base_fpr, mean_tprs, 'b', label = 'AUC = %0.2f' % mean_auc)
+    plt.plot(base_fpr, mean_tprs, 'b', label = 'Mean AUC = ' + str(mean_auc) + ' '+ r'$\pm$' + ' ' + str(ci))
     plt.fill_between(base_fpr, tprs_lower, tprs_upper, color='grey', alpha=0.3)
     plt.legend(loc = 'lower right')
     plt.plot([0, 1], [0, 1],'r--')
