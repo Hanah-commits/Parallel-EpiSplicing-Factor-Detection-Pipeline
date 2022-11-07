@@ -129,7 +129,7 @@ def stratified_classifier(output_dir):
 
     # obtain range of AUCs
     auc_range = np.percentile(aucs, (2.5, 97.5))
-    ci = float("%.2f" % (auc_range[1] - auc_range[0]))
+    ci = float("%.2f" % (auc_range[1] - auc_range[0]))/2
     mean_auc = "%.2f" % (auc_range[1] - ci)
 
     
