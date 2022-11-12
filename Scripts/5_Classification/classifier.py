@@ -138,10 +138,6 @@ def stratified_classifier(output_dir):
     ci = float("%.2f" % (auc_range[1] - auc_range[0]))/2
     mean_auc = "%.2f" % (auc_range[1] - ci)
 
-    
-
-
-    
     # mean gini_impurity across all folds
     def foo(r, d):
         for k in d:
