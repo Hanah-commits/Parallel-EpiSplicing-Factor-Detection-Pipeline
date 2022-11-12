@@ -127,17 +127,19 @@ def stratified_classifier(output_dir):
         roc_auc = metrics.auc(fpr, tpr)
         aucs.append(roc_auc)
 
+        plt.plot(fpr, tpr, 'b', alpha=0.15)
+        tpr = np.interp(base_fpr, fpr, tpr)
+        tpr[0] = 0.0
+        tprs.append(tpr)
+        gini_scores.append(dict(zip(sf,model.feature_importances_)))
+
     # obtain range of AUCs
     auc_range = np.percentile(aucs, (2.5, 97.5))
     ci = float("%.2f" % (auc_range[1] - auc_range[0]))/2
     mean_auc = "%.2f" % (auc_range[1] - ci)
 
     
-    plt.plot(fpr, tpr, 'b', alpha=0.15)
-    tpr = np.interp(base_fpr, fpr, tpr)
-    tpr[0] = 0.0
-    tprs.append(tpr)
-    gini_scores.append(dict(zip(sf,model.feature_importances_)))
+
 
     
     # mean gini_impurity across all folds
