@@ -1,32 +1,40 @@
-import pandas as pd
+
 import json
+import os
 
 with open('paths.json') as f:
     d = json.load(f)
 
 ref = d['Reference genome']
+fasta = d['Reference fasta']
 
-ref = pd.read_csv(ref, delimiter='\t',header=None)[[0,1,2]]
+# exon coordinates
+os.system('Rscript PreProcessing/get_exons.R')
 
-flanks = [50, 100, 200]
+# genome file
+os.system("samtools faidx " + fasta)
+ref_genome= fasta+".fai"
+
+# flanks
+flanks = ["50", "100", "200"]
 
 for flank in flanks:
 
-    start_df = ref.drop(ref.columns[2], 1)
-    stop_df = ref.drop(ref.columns[1], 1)
+    # exon boundary external flanks
+    os.system("bedtools flank -i exon_coords.bed -g " + ref_genome + " -b "+ flank + " > 0_Files/flanks.bed" )
 
+    # separate start,stop flank coords
+    os.system("sed -n 'n;p' flanks.bed > 0_Files/stop.bed")
+    os.system("sed -n 'p;n' flanks.bed > 0_Files/start.bed")
 
-    start_df[2] = pd.to_numeric(start_df[1]) + flank  # extend 200bp 5' direction
-    start_df[1] = pd.to_numeric(start_df[1]) - flank  # extend 200bp 3' direction
+    # exon boundary internal flanks
+    os.system("bedtools slop -i start.bed -g " + ref_genome + " -l 0 -r " + flank + " > 0_Files/start_flanks.bed")
+    os.system("bedtools slop -i stop.bed -g " + ref_genome +" -l " + flank + " -r 0 > 0_Files/stop_flanks.bed")
 
+    # combine start,stop flank coords
+    os.system("paste -d'\n' start_flanks.bed stop_flanks.bed > 0_Files/flanks" + flank + ".bed")
 
-    stop_df[1] = pd.to_numeric(stop_df[2]) - flank  # extend 200bp 5' direction
-    stop_df[2] = pd.to_numeric(stop_df[2]) + flank  # extend 200bp 3' direction
-
-    new_ref = pd.concat([start_df, stop_df]).sort_index(kind='merge')
-
-    new_ref[1] = new_ref[1].astype(int)
-    new_ref[2] = new_ref[2].astype(int)
-
-    print(new_ref)
-    new_ref.to_csv('0_Files/flanks' + str(flank) + '.bed', sep='\t', index=False, header=False)
+    # remove intermediate files
+    os.system("rm 0_Files/start*.bed")
+    os.system("rm  0_Files/stop*.bed")
+    os.system("rm 0_Files/flanks.bed")
