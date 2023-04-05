@@ -5,6 +5,7 @@
 "RNASeq files":"",
 "ChIPSeq files":"",
 "Reference genome":"",
+"Reference fasta":"",
 "threads":"",
 "MAJIQ config":"",
 "RBPmap directory" : "",
