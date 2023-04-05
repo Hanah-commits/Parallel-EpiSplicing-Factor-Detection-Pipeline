@@ -48,7 +48,7 @@ $ install.packages("rjson")
 
 3.  Install [RBPMap](http://rbpmap.technion.ac.il/download.html#requirements)
 
-        _Note: [Helper scripts](#Helper-Scripts) for the installation can be found in_
+    _Note: [Helper scripts](#Helper-Scripts) for the installation can be found in_
 
     `~/EpiSplicing-Factor-Detection-Pipeline/Scripts/HelperScripts`
 
