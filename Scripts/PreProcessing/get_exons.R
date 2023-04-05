@@ -18,7 +18,7 @@ gff3 <- GenomicFeatures::makeTxDbFromGFF(organism = "Homo sapiens",
                                     file =  gff3.file)
 
 ## extract exons from the transcript database
-exons <- exons(gtf)
+exons <- exons(gff3)
 exons
 ## convert exonsanges object into a dataframe
 df.exon <- data.frame(seqnames=seqnames(exons),
