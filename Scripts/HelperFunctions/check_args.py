@@ -12,6 +12,7 @@ def check_args():
     args = {
     "RNASeq files" : d['RNASeq files'],
     "Reference genome" : d['Reference genome'],
+    "Reference fasta": d['Reference fasta'],
     "tissue1" : d["tissue1"],
     "tissue2" : d["tissue2"],
     "Histone modifications" : d["Histone modifications"],
@@ -22,6 +23,7 @@ def check_args():
     }
 
     #check histone modifications & tissue names
+    args["Histone modifications"] = [x for x in args["Histone modifications"] if x]
     if len(args["Histone modifications"]) == 0:
         raise ValueError('No Histone Modifications')
 
@@ -52,7 +54,7 @@ def check_args():
             raise ValueError('Path does not exist ' + path)
 
     # check path validity of files
-    file_paths = [args["Reference genome"], args["MAJIQ config"]]
+    file_paths = [args["Reference genome"], args["Reference fasta"], args["MAJIQ config"]]
     for file in file_paths:
         
         if not os.path.isfile(file):
