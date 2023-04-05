@@ -58,9 +58,10 @@ $ install.packages("rjson")
 
 ## Required Files
 
-1. Reference Genome: GFF3 file
+1. Reference Genome: GFF3 file, fasta
 
 - Download the gff3 file from gencode. It fits the [requirements of MAJIQ.](https://biociphers.bitbucket.io/majiq/quick.html)
+- Download the corresponding .fa file
 
 2.  RNASeq files : .bam and .bam.bai
 
@@ -121,7 +122,7 @@ H3K27ac_ectodermalcell_peak.bed
 
 ### RBPMap installation helper scripts
 
-_Note: Please replace the given paths with the appropriate paths in your machine_
+*Note: Please replace the given paths with the appropriate paths in your machine*
 
 1. To download .fa files of required chromosomes.
    ftp.py
