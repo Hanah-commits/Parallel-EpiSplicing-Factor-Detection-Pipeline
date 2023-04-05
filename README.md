@@ -33,6 +33,11 @@ $ pip install git+https://bitbucket.org/biociphers/majiq_academic.git/voila
 $ pip install -r requirements.txt
 ```
 
+- Install R packages
+```
+GenomicFeatures
+```
+
 - If using the weight flag `-w` , install the following R packages:
 
 ```
