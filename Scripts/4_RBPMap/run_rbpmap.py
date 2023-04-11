@@ -1,17 +1,6 @@
-import shutil
 import os
-import glob
 import json
 
-
-# wdir = os.path.dirname(os.path.realpath(__file__))
-
-# # STEP 0: Delete output directories from previous run
-# path = '../Input Files/RBPmap'
-# result_dirs = [x[0] for x in os.walk(path)]
-# result_dirs = [p for p in result_dirs if 'results' in p]
-# for dirpath in result_dirs:
-#     shutil.rmtree(dirpath)
 
 # STEP 1: Run RBPmap
 
@@ -30,9 +19,3 @@ sfs = ['BRUNOL4', 'BRUNOL5', 'BRUNOL6', 'DAZAP1', 'ESRP2', 'FMR1', 'FUS', 'FXR1'
 os.system("parallel --joblog parallel_log -a " + file + " perl RBPmap_EpiSplicing.pl -input {1} -genome 'human' -db 'hg38' -db_motifs " + ",".join(sfs))
 
 os.chdir(currdir)
-
-
-
-
-
-
