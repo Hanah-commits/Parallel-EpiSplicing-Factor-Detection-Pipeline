@@ -7,10 +7,6 @@ from scipy.stats import rankdata
 import matplotlib.pyplot as plt
 
 
-def pearsonr_coeff(x, y):
-    return pearsonr(x, y)[0]
-
-
 def pearsonr_pval(x, y):
     return pearsonr(x, y)[1]
 
@@ -55,14 +51,6 @@ def p_adjust_bh(p):
     return q[by_orig]
 
 
-def fdr(p_vals):
-    ranked_p_values = rankdata(p_vals)
-    fdr = p_vals * len(p_vals) / ranked_p_values
-    fdr[fdr > 1] = 1
-
-    return fdr
-
-
 def plot_histogram(df, columns, status=0):
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 10))
     col = 0
@@ -94,78 +82,75 @@ def find_epigenes(df):
     return epi_genes
 
 
-with open('paths.json') as f:
-    d = json.load(f)
 
-hms = d["Histone modifications"]
+if __name__ == "__main__":
 
-dPSI = pd.read_csv('0_Files/Filtered_dPSI.csv', delimiter='\t')
-peaks = pd.read_csv('0_Files/Filtered_MValues.csv', delimiter='\t')
-dPSI.drop_duplicates(inplace=True)
-peaks.drop_duplicates(inplace=True)
-flanks = pd.merge(dPSI, peaks, how="outer")
+    with open('paths.json') as f:
+        d = json.load(f)
 
-# FILTER 1: drop genes with less than 10 flanks
-flanks = flanks[flanks.groupby('gene_id').gene_id.transform(len) > 2]
+    hms = d["Histone modifications"]
 
-# # FILTER 2: drop genes with dPSI values but no peak
-cols = ['gene_id'] + hms
-grouped = flanks[cols].groupby('gene_id')
-non_epi = []
-for gene, group in grouped:
-    if group[hms].isnull().all().all():
-        non_epi.append(gene)
-
-filtered_flanks = flanks[~flanks['gene_id'].isin(non_epi)]
-filtered_flanks.set_index('flanks', inplace=True)
-
-# if one or more flanks of a gene have less than four peaks
-filtered_flanks.fillna(0, inplace=True)
-
-# num = flanks.groupby(['gene_id']).size().reset_index(name='no_flanks') # # number of flanks for each gene
-# num = num[num['no_flanks'] > 9]
-# print(num)
-
-# Step 1: Calculate correlation coefficients and p values
-pval = filtered_flanks.groupby('gene_id').corr(method=pearsonr_pval)
-
-# Step 2: Keep only relevant correlations
-pval.to_csv('0_Files/pvals.csv', sep='\t')
-new_pvals = pd.read_csv('0_Files/pvals.csv', delimiter='\t')
-new_pvals.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True)
-
-# dropping p-values of hm-hm correlations
-new_pvals = new_pvals.iloc[::5, :]
-
-# drop genes where no dPSI-HM correlations exist
-new_pvals.dropna(subset=hms, how='all', inplace=True)
-
-# cleanup
-new_pvals.reset_index(inplace=True)
-del new_pvals['index']
-
-# Step 3: Visualise p-value distribution
-# plot_histogram(new_pvals, columns=["H3K4me3", "H3K27me3", "H3K9me3", "H3K27ac"])
-
-# Step 4: Adjust the p values using Benjamini-Hochberg method
-adj_pvals = adjust_pvalue(new_pvals)
-
-# plot_histogram(adj_pvals, columns=["H3K4me3_adj", "H3K27me3_adj", "H3K9me3_adj", "H3K27ac_adj"])
-# print(adj_pvals[adj_pvals['gene_id'] == 'ENSG00000154134.15'])
-
-# Step 5: Obtain genes where adjusted_pval < 0.05
-epigenes = find_epigenes(adj_pvals)
-print('Epigenes ', len(epigenes))
-print('Non-Epigenes ', len(non_epi))
+    dPSI = pd.read_csv('0_Files/Filtered_dPSI.csv', delimiter='\t')
+    peaks = pd.read_csv('0_Files/Filtered_MValues.csv', delimiter='\t')
+    dPSI.drop_duplicates(inplace=True)
+    peaks.drop_duplicates(inplace=True)
+    flanks = pd.merge(dPSI, peaks, how="outer")
 
 
-# get flanks of epispliced genes
-flanks[flanks['gene_id'].isin(epigenes)].to_csv('0_Files/dPSI_Mval_epi.csv', sep='\t', index=False)
+    # FILTER 1: drop genes with less than 3 flanks
+    flanks = flanks[flanks.groupby('gene_id').gene_id.transform(len) > 2]
 
-# # get flanks of non-epispliced genes
-flanks[flanks['gene_id'].isin(non_epi)].to_csv('0_Files/dPSI_Mval_nonepi.csv', sep='\t', index=False)
+    # # FILTER 2: genes with dPSI values but no peak -> non-epigenes
+    cols = ['gene_id'] + hms
+    grouped = flanks[cols].groupby('gene_id')
+    non_epi = []
+    for gene, group in grouped:
+        if group[hms].isnull().all().all():
+            non_epi.append(gene)
 
-#clean-up
-os.remove('0_Files/pvals.csv')
-os.remove('0_Files/Filtered_dPSI.csv')
-os.remove('0_Files/Filtered_MValues.csv')
+    filtered_flanks = flanks[~flanks['gene_id'].isin(non_epi)]
+    filtered_flanks.set_index('flanks', inplace=True)
+
+    # if one or more flanks of a gene have less than four peaks
+    filtered_flanks.fillna(0, inplace=True)
+
+    # Step 1: Calculate correlation coefficients and p values
+    pval = filtered_flanks.groupby('gene_id').corr(method=pearsonr_pval)
+
+    # Step 2: Keep only relevant correlations
+    pval.to_csv('0_Files/pvals.csv', sep='\t')
+    new_pvals = pd.read_csv('0_Files/pvals.csv', delimiter='\t')
+    new_pvals.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True)
+
+    # dropping p-values of hm-hm correlations
+    new_pvals = new_pvals.iloc[::5, :]
+
+    # drop genes where no dPSI-HM correlations exist
+    new_pvals.dropna(subset=hms, how='all', inplace=True)
+
+    # cleanup
+    new_pvals.reset_index(inplace=True)
+    del new_pvals['index']
+
+    # # Step 3: Visualise p-value distribution
+    # plot_histogram(new_pvals, columns=["H3K4me3", "H3K27me3", "H3K9me3", "H3K27ac"])
+
+    # Step 4: Adjust the p values using Benjamini-Hochberg method
+    adj_pvals = adjust_pvalue(new_pvals)
+
+    # Step 5: Obtain genes where adjusted_pval < 0.05
+    epigenes = find_epigenes(adj_pvals)
+    print('Epigenes ', len(epigenes))
+    print('Non-Epigenes ', len(non_epi))
+
+
+    # get flanks of epispliced genes
+    flanks[flanks['gene_id'].isin(epigenes)].to_csv('0_Files/dPSI_Mval_epi.csv', sep='\t', index=False)
+
+    # # get flanks of non-epispliced genes
+    flanks[flanks['gene_id'].isin(non_epi)].to_csv('0_Files/dPSI_Mval_nonepi.csv', sep='\t', index=False)
+
+    #clean-up
+    os.remove('0_Files/pvals.csv')
+    os.remove('0_Files/Filtered_dPSI.csv')
+    os.remove('0_Files/Filtered_MValues.csv')
