@@ -112,8 +112,8 @@ def process_results(result_dirs, type):
 if __name__ == "__main__":
     path = '../RBPmap'
     results_dirs = [x[0] for x in os.walk(path)]
-    epi_dirs = [p for p in results_dirs if 'resultsrbp_input_epi' in p]
-    nonepi_dirs = [p for p in results_dirs if 'resultsrbp_input_nonepi' in p]
+    epi_dirs = [p for p in results_dirs if 'resultsrbp_input_epi' in p and 'sequence' in p]
+    nonepi_dirs = [p for p in results_dirs if 'resultsrbp_input_nonepi' in p and 'sequence' in p]
 
     process_results(epi_dirs, 'epi')
     process_results(nonepi_dirs, 'nonepi')
