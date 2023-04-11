@@ -39,17 +39,6 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     names.columns = ['gene_id', 'gene']
     features = pd.merge(features, names, on='gene_id')
 
-    # if '_epi' in filename1:
-    #     clusters = json.load(open("clusters.txt"))
-    #     for label, cluster in clusters.items():
-    #         file = 'clustermatrix' + str(label) + '.csv'
-    #         cluster_features = features[features['gene_id'].isin(cluster)]
-    #         del cluster_features['gene_id']
-    #         cols = cluster_features.columns.tolist()
-    #         cols = cols[-1:] + cols[:-1]
-    #         cluster_features = cluster_features[cols]
-    #         cluster_features.to_csv(file, sep='\t', index=False)
-
     del features['gene_id']
     cols = features.columns.tolist()
     cols = cols[-1:] + cols[:-1]
