@@ -21,7 +21,8 @@ $ pip install git+https://bitbucket.org/biociphers/majiq_academic.git/voila
 ```
 
 - MANorm
-- Samtools
+- samtools
+- bedtools
 - FeatureCounts (if using weights for splicing factor binding scores)
   #TODO add versions
 
