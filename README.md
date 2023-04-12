@@ -55,7 +55,7 @@ $ install.packages("rjson")
 
 - Download the required files from http://rbpmap.technion.ac.il/download.html#requirements and follow the installation instructions.
 - Copy the perl script `~/EpiSplicing-Factor-Detection-Pipeline/Scripts/HelperScripts/RBPmap_EpiSplicing.pl` to your main RBPmap directory. This will be used as the main RBPmap script.
-- In `RBPmap_Episplicing.pl`, please edit the paths in the following variables: $scripts_dir, $results_dir to your RBPmap installation path.
+- In `RBPmap_Episplicing.pl`, please edit the paths in the following variables: $scripts_dir, $results_dir to your local *RBPmap* and *EpiSplicing-Factor-Detection-Pipeline* paths, respectively.
 
 ## Required Files
 
