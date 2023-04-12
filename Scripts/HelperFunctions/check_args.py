@@ -60,13 +60,22 @@ def check_args():
         if not os.path.isfile(file):
             raise ValueError('File does not exist ' + file)
 
+        
+    # check if temp directories already exist
+    temp_dirs = ['0_Files/', '../RBPmap/']
+    for dir in temp_dirs:
+        if os.path.exists(dir):
+            # temp dir not empty
+            if len(os.listdir(dir)) != 0:
+                raise ValueError('Delete or move directory to another location ' + dir)
+        else: 
+            #create temp dir
+            Path(dir).mkdir(parents=True, exist_ok=True)
+
+
     # create custome output directory tissue1_tissue2_timestamp
     output_dir = str(Path(os.getcwd()).parent.absolute()) + "/Output/"+ args["tissue1"]+ "_" + args["tissue2"]+ "_" + str(time.time()) +"/"
     Path(output_dir).mkdir(parents=True, exist_ok=True)
-
-    # create temp directories
-    Path('0_Files/').mkdir(parents=True, exist_ok=True)
-    Path('../RBPmap/').mkdir(parents=True, exist_ok=True)
 
 
     with open('paths.json', 'w') as fp:
