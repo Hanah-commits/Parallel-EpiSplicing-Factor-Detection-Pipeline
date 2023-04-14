@@ -12,43 +12,33 @@ The weight flag (optional) `-w` is used when the expression levels of the splici
 
 _Note: If using a conda environemnt, check the R version for which the required R packages exist before creating the conda environment._
 
-1. Install the following tools:
+1. Create a conda environment from the environment.yml file:
 
-- [MAJIQ](https://bitbucket.org/biociphers/majiq_academic/src/main/)
+```
+$ conda env create -f environment.yml
+```
+
+2. Install [dependencies required for MAJIQ](https://biociphers.bitbucket.io/majiq-docs-academic/getting-started-guide/installing.html)
+
+3. Install [MAJIQ](https://bitbucket.org/biociphers/majiq_academic/src/main/)
 
 ```
 $ pip install git+https://bitbucket.org/biociphers/majiq_academic.git/voila
 ```
 
-- MANorm
-- samtools
-- bedtools
-- GNU parallel
-- FeatureCounts (if using weights for splicing factor binding scores)
-  #TODO add versions
-
-2. Install pipeline requirements.
-
-- Install the python packages from requirements.txt
+4.Install the following R packages:
 
 ```
-$ pip install -r requirements.txt
-```
+$ GenomicFeatures
 
-- Install R packages
-```
-GenomicFeatures
-```
+# Optional: if using the weight flag `-w` , install the following R packages:
 
-- If using the weight flag `-w` , install the following R packages:
-
-```
 $ edger
 $ limma
 $ install.packages("rjson")
 ```
 
-3.  Install [RBPMap](http://rbpmap.technion.ac.il/download.html#requirements)
+5.  Install [RBPMap](http://rbpmap.technion.ac.il/download.html#requirements)
 
     _Note: [Helper scripts](#Helper-Scripts) for the installation can be found in_
 
