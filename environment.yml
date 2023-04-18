@@ -43,7 +43,7 @@ dependencies:
   - xz=5.2.10=h5eee18b_1
   - zlib=1.2.13=h5eee18b_0
   - pip:
-    - click==8.0.4
+    - click==7.1.2
     - cycler==0.11.0
     - decorator==5.1.1
     - flask==1.0.2
@@ -53,7 +53,7 @@ dependencies:
     - gitdb2==2.0.6
     - gitpython==3.0.5
     - gunicorn==19.9.0
-    - h5py==2.10.0
+    - h5py==3.7.0
     - itsdangerous==1.1.0
     - jinja2==2.11.1
     - joblib==1.1.0
@@ -76,7 +76,7 @@ dependencies:
     #- rna-voila==2.3.0+scmfallback
     - scikit-learn==1.0.2
     - scipy==1.7.3
-    - six==1.16.0
+    - six==1.14.0
     - sklearn==0.0
     - smmap2==2.0.5
     - threadpoolctl==3.1.0
