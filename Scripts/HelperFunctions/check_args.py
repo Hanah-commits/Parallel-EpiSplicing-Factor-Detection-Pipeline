@@ -83,6 +83,6 @@ def check_args():
         json.dump(args, fp)
 
     # copy input arguments (paths.json) to output_dir
-    shutil.copyfile('paths.json', output_dir)
+    shutil.copyfile('paths.json', output_dir+'paths.json')
 
     return output_dir
