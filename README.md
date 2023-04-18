@@ -141,3 +141,4 @@ for i in *.fa; do
   "../faToNib" "/home/ubuntu/RBPmap_1.2/UCSC/hg38/${i}" "${j}";
   done
 ```
+
