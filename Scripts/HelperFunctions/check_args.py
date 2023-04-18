@@ -2,6 +2,7 @@ import time
 import os
 import json
 from pathlib import Path
+import shutil
 
 
 def check_args():
@@ -80,5 +81,8 @@ def check_args():
 
     with open('paths.json', 'w') as fp:
         json.dump(args, fp)
+
+    # copy input arguments (paths.json) to output_dir
+    shutil.copyfile('paths.json', output_dir)
 
     return output_dir
