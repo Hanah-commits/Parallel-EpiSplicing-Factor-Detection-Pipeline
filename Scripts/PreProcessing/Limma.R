@@ -13,9 +13,9 @@ do.call("rbind", json_data)
 
 tissue1 <- json_data$tissue1
 tissue2 <- json_data$tissue2
-tissue1_count <- as.numeric(json_data$tissue1_count)
-tissue2_count <- as.numeric(json_data$tissue2_count)
-
+data_dir <- json_data$"RNASeq files"
+tissue1_count <- length(list.files(data_dir, pattern=paste(tissue1,".+bam$", sep=""), full.names = TRUE, recursive = FALSE))
+tissue2_count <- length(list.files(data_dir, pattern=paste(tissue2,".+bam$", sep=""), full.names = TRUE, recursive = FALSE))
 
 file = paste("0_Files/" , tissue1 , '_' , tissue2 , '_counts', sep="")
 
