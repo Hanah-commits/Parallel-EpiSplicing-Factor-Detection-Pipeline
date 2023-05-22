@@ -3,6 +3,7 @@
 "tissue2" : "",
 "Histone modifications":["", ""],
 "RNASeq files":"",
+"strandedness":"",
 "ChIPSeq files":"",
 "Reference genome":"",
 "Reference fasta":"",
