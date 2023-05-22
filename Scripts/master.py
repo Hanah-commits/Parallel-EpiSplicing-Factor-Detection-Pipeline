@@ -128,6 +128,7 @@ except Exception as ex:
 # STEP 12: Add logFC weights to binding scores from RBPMap
 if weights:
     try:
+        exec(open("PreProcessing/get_weights.py").read())
         exec(open("4_RBPMap/rbp-weights.py").read())
     except Exception as ex:
         print(ex)

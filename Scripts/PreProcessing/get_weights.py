@@ -2,7 +2,7 @@ import pandas as pd
 
 logFC_Scores = pd.read_csv('0_Files/logFC.csv', delimiter='\t',
                            header=None, names=['Gene stable ID', 'logFC'])
-names = pd.read_csv('0_Files/GeneID_Name.csv', delimiter='\t')
+names = pd.read_csv('HelperFunctions/GeneID_Name.csv', delimiter='\t')
 
 rbp = ['A1CF', 'ANKHD1', 'CELF4', 'CELF5', 'CELF6', 'CNOT4', 'CPEB2', 'CPEB4', 'DAZAP1', 'ENOX1', 'ESRP2', 'FMR1',
        'FUS', 'FXR1', 'FXR2', 'G3BP2', 'HNRNPA1', 'HNRNPA1', 'HNRNPA1', 'HNRNPA1L2', 'HNRNPA2B1', 'HNRNPA2B1',
@@ -16,7 +16,7 @@ names = names[names['Gene name'].isin(rbp)]
 logFC_Scores['Gene stable ID'] = logFC_Scores['Gene stable ID'].str.split(
     '.').str[0]
 logFC_Scores = pd.merge(logFC_Scores, names, on='Gene stable ID')
-print(len(logFC_Scores))
+
 logFC_Scores['Gene name'] = logFC_Scores['Gene name'].replace({'CELF4': 'BRUNOL4',
                                                                'CELF5': 'BRUNOL5',
                                                                'CELF6': 'BRUNOL6',
