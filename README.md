@@ -102,6 +102,7 @@ H3K27ac_ectodermalcell_peak.bed
   "tissue2": "endodermalcell",
   "Histone modifications": ["H3K27ac", "H3K9me3"],
   "RNASeq files": "/home/user/bam_files",
+  "strandedness" : "1",
   "ChIPSeq files": "/home/user/bed_files",
   "Reference genome": "/home/user/gencode.gtf",
   "threads": "8",
@@ -109,6 +110,8 @@ H3K27ac_ectodermalcell_peak.bed
   "RBPmap directory": "/home/user/RBPmap"
 }
 ```
+
+*Note: _strandedness" can take three possible values:  0 (unstranded), 1 (stranded) and 2 (reversely stranded) 
 
 ## Helper Scripts
 

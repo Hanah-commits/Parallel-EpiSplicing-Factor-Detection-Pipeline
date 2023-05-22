@@ -1,3 +1,4 @@
+
 import os
 import json
 
@@ -11,6 +12,7 @@ if __name__ == "__main__":
     tissue1 = d["tissue1"]
     tissue2 = d["tissue2"]
     threads = d['threads']
+    strand = d['strandedness']
 
     currdir = os.getcwd()
     opdir = currdir + '/0_Files/' + tissue1+'_'+tissue2+'_counts'
@@ -20,4 +22,4 @@ if __name__ == "__main__":
     # -o -> required option for specifying path to, and name of the text output (count matrix)
 
 
-    os.system('featureCounts -p -T '+ threads +' -a ' + ref + ' -o ' + opdir + ' ' + bam_files+ '/*.bam')
+    os.system('featureCounts -p -s ' + strand + ' -T '+ threads +' -a ' + ref + ' -o ' + opdir + ' ' + bam_files+ '/*.bam')
