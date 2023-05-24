@@ -131,9 +131,9 @@ if __name__ == "__main__":
 
     # Step 0: Find genes with strong DEU-DHM correlations
     coeff = filtered_flanks.groupby('gene_id').corr(method=pearsonr_coeff)
-    coeff.to_csv('0_Files/coeff.csv', sep='\t')
 
-     # internal column filtering
+    # internal column filtering
+    coeff.to_csv('0_Files/coeff.csv', sep='\t')
     coeff = pd.read_csv('0_Files/coeff.csv', delimiter='\t')
     coeff.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True)
     
@@ -155,25 +155,27 @@ if __name__ == "__main__":
     pval = filtered_flanks.groupby('gene_id').corr(method=pearsonr_pval)
 
     # Step 2: Keep only relevant correlations
+
+    # internal column filtering
     pval.to_csv('0_Files/pvals.csv', sep='\t')
-    new_pvals = pd.read_csv('0_Files/pvals.csv', delimiter='\t')
-    new_pvals.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True)
+    pval = pd.read_csv('0_Files/pvals.csv', delimiter='\t')
+    pval.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True)
 
     # dropping p-values of hm-hm correlations
-    new_pvals = new_pvals.iloc[::5, :]
+    pval = pval.iloc[::5, :]
 
     # drop genes where no dPSI-HM correlations exist
-    new_pvals.dropna(subset=hms, how='all', inplace=True)
+    pval.dropna(subset=hms, how='all', inplace=True)
 
     # cleanup
-    new_pvals.reset_index(inplace=True)
-    del new_pvals['index']
+    pval.reset_index(inplace=True)
+    del pval['index']
 
     # # Step 3: Visualise p-value distribution
-    # plot_histogram(new_pvals, columns=["H3K4me3", "H3K27me3", "H3K9me3", "H3K27ac"])
+    # plot_histogram(pval, columns=["H3K4me3", "H3K27me3", "H3K9me3", "H3K27ac"])
 
     # Step 4: Adjust the p values using Benjamini-Hochberg method
-    adj_pvals = adjust_pvalue(new_pvals)
+    adj_pvals = adjust_pvalue(pval)
 
     # Step 5: Obtain genes where adjusted_pval < 0.05
     epigenes = find_epigenes(adj_pvals)
@@ -189,5 +191,3 @@ if __name__ == "__main__":
 
     #clean-up
     os.remove('0_Files/pvals.csv')
-    os.remove('0_Files/Filtered_dPSI.csv')
-    os.remove('0_Files/Filtered_MValues.csv')
