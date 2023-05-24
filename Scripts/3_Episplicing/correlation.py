@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 def pearsonr_pval(x, y):
     return pearsonr(x, y)[1]
 
+def pearsonr_coeff(x, y):
+    return pearsonr(x, y)[0]
+
 
 def adjust_pvalue(df):
     pval_cols = df.columns.tolist()[1:]  # skipping gene-id column
@@ -72,6 +75,18 @@ def plot_histogram(df, columns, status=0):
     plt.show()
 
 
+def strong_corr(df):
+    coeff_cols = df.columns.tolist()[1:]  # skipping gene-id column
+    strong_corr_genes = []
+    for col in coeff_cols:
+        df [col] = df[col].abs()
+        strong_corr_genes.extend((df.loc[df[col] >= 0.5, 'gene_id']).values.tolist())
+
+    strong_corr_genes = sorted(list(set(strong_corr_genes)))
+    return strong_corr_genes
+
+    
+
 def find_epigenes(df):
     pval_cols = df.columns.tolist()[:-1]  # skipping gene-id column
     epi_genes = []
@@ -113,6 +128,28 @@ if __name__ == "__main__":
 
     # if one or more flanks of a gene have less than four peaks
     filtered_flanks.fillna(0, inplace=True)
+
+    # Step 0: Find genes with strong DEU-DHM correlations
+    coeff = filtered_flanks.groupby('gene_id').corr(method=pearsonr_coeff)
+    coeff.to_csv('0_Files/coeff.csv', sep='\t')
+
+     # internal column filtering
+    coeff = pd.read_csv('0_Files/coeff.csv', delimiter='\t')
+    coeff.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True)
+    
+    # dropping p-values of hm-hm correlations
+    coeff = coeff.iloc[::5, :]
+
+    # drop genes where no dPSI-HM correlations exist
+    coeff.dropna(subset=hms, how='all', inplace=True)
+
+    # cleanup
+    coeff.reset_index(inplace=True)
+    del coeff['index']
+
+    strong_corr_genes = strong_corr(coeff)
+
+    filtered_flanks = filtered_flanks[filtered_flanks['gene_id'].isin(strong_corr_genes)]
 
     # Step 1: Calculate correlation coefficients and p values
     pval = filtered_flanks.groupby('gene_id').corr(method=pearsonr_pval)
