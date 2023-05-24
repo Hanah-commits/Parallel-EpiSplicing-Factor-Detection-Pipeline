@@ -87,13 +87,13 @@ def strong_corr(df):
 
     
 
-def find_epigenes(df):
+def find_epigenes(df, corr_genes):
     pval_cols = df.columns.tolist()[:-1]  # skipping gene-id column
     epi_genes = []
     for col in pval_cols:
         epi_genes.extend((df.loc[df[col] <= 0.05, 'gene_id']).values.tolist())
 
-    epi_genes = sorted(list(set(epi_genes)))
+    epi_genes = sorted(list(set(epi_genes) & set(corr_genes)))
     return epi_genes
 
 
@@ -149,9 +149,8 @@ if __name__ == "__main__":
 
     strong_corr_genes = strong_corr(coeff)
 
-    filtered_flanks = filtered_flanks[filtered_flanks['gene_id'].isin(strong_corr_genes)]
 
-    # Step 1: Calculate correlation coefficients and p values
+    # Step 1: Obtain p values
     pval = filtered_flanks.groupby('gene_id').corr(method=pearsonr_pval)
 
     # Step 2: Keep only relevant correlations
@@ -178,7 +177,7 @@ if __name__ == "__main__":
     adj_pvals = adjust_pvalue(pval)
 
     # Step 5: Obtain genes where adjusted_pval < 0.05
-    epigenes = find_epigenes(adj_pvals)
+    epigenes = find_epigenes(adj_pvals, strong_corr_genes)
     print('Epigenes ', len(epigenes))
     print('Non-Epigenes ', len(non_epi))
 
