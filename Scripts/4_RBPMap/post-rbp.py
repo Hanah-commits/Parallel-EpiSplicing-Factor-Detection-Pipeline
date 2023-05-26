@@ -1,6 +1,35 @@
 import csv
 import pandas as pd
+import numpy as np
 import os
+
+def adjust_pvalue(df, col):
+
+    # get indices of null values
+    na_idx = df[df[col].isnull()].index.tolist()
+
+    # adjust non-null p values
+    pvals = df[col].values.tolist()
+    pvals = [x for x in pvals if str(x) != 'nan']
+    adj_pval = p_adjust_bh(pvals).tolist()
+
+    # insert null at original indices
+    for idx in na_idx:
+        adj_pval.insert(idx, None)
+
+    # adjusted p values as new df
+    df.loc[:, 'adj_pval'] = adj_pval
+    return df
+
+
+def p_adjust_bh(p):
+    ## multiple hypothesis testing
+    p = np.asfarray(p)
+    by_descend = p.argsort()[::-1]
+    by_orig = by_descend.argsort()
+    steps = float(len(p)) / np.arange(len(p), 0, -1)
+    q = np.minimum(1, np.minimum.accumulate(steps * p[by_descend]))
+    return q[by_orig]
 
 
 def process_results(result_dirs, type):
@@ -67,12 +96,14 @@ def process_results(result_dirs, type):
             zscore_list = []
             pval_list = []
             for p in proteins:
-                protein_df = result_df.loc[result_df['protein'] == p]
+                protein_df = result_df.loc[result_df['protein'] == p].copy()
                 if protein_df.empty:  # protein has no binding site in flank
                     zscore_list.append(0)
                     pval_list.append(None)
-                else:  # assign z score based on significant p value
-                    protein_df['P-value'] = pd.to_numeric(protein_df['P-value'])
+                else:  # assign z score based on significant adj p value
+                    protein_df.loc[:, 'P-value'] = pd.to_numeric(protein_df['P-value'])
+                    protein_df = adjust_pvalue(protein_df, 'P-value')
+                    protein_df = protein_df[protein_df['adj_pval'] <= 0.05]
                     minidx = protein_df['P-value'].idxmin()
                     significant_z = protein_df.loc[minidx]['Z-score']
                     significant_p = protein_df.loc[minidx]['P-value']

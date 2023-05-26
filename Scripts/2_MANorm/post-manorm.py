@@ -1,6 +1,36 @@
 import pandas as pd
-import sys
+import numpy as np
 import json
+import sys
+
+def adjust_pvalue(df, col):
+
+    # get indices of null values
+    na_idx = df[df[col].isnull()].index.tolist()
+
+    # adjust non-null p values
+    pvals = df[col].values.tolist()
+    pvals = [x for x in pvals if str(x) != 'nan']
+    adj_pval = p_adjust_bh(pvals).tolist()
+
+    # insert null at original indices
+    for idx in na_idx:
+        adj_pval.insert(idx, None)
+
+    # adjusted p values as new df
+    df['adj_pval'] = adj_pval
+    return df
+
+
+def p_adjust_bh(p):
+    ## multiple hypothesis testing
+    p = np.asfarray(p)
+    by_descend = p.argsort()[::-1]
+    by_orig = by_descend.argsort()
+    steps = float(len(p)) / np.arange(len(p), 0, -1)
+    q = np.minimum(1, np.minimum.accumulate(steps * p[by_descend]))
+    return q[by_orig]
+
 
 prefix = sys.argv[1] + 'MANorm/'
 
@@ -28,6 +58,12 @@ for file in peaksfiles:
     peaks.set_axis(['seqid', 'flank0', 'flank1', 'peak0', 'peak1', 'summit', 'M_value', 'p_value', 'flanks'],
                    axis=1, inplace=True)
     peaks['M_value_abs'] = pd.to_numeric(peaks['M_value']).abs()
+    peaks.loc[peaks['M_value'] == 0, 'p_value'] = np.NaN # null pvalues if no peak in flank
+
+    # keep M-values of peaks with adj P-value <= 0.05
+    peaks['p_value'] = pd.to_numeric(peaks['p_value'])
+    peaks = adjust_pvalue(peaks, col='p_value')
+    peaks.loc[pd.to_numeric(peaks['adj_pval']) > 0.05, 'M_value_abs'] = 0 
 
     # # get all peaks that belong to each flank
     flank_peaks_group = peaks.groupby(['seqid', 'flanks'])['M_value_abs'] \

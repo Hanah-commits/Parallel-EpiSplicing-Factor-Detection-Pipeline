@@ -1,6 +1,36 @@
 import pandas as pd
+import numpy as np
 from pandas import Series
 import sys
+
+
+def adjust_pvalue(df, col):
+
+    # get indices of null values
+    na_idx = df[df[col].isnull()].index.tolist()
+
+    # adjust non-null p values
+    pvals = df[col].values.tolist()
+    pvals = [x for x in pvals if str(x) != 'nan']
+    adj_pval = p_adjust_bh(pvals).tolist()
+
+    # insert null at original indices
+    for idx in na_idx:
+        adj_pval.insert(idx, None)
+
+    # adjusted p values as new df
+    df['adj_pval'] = adj_pval
+    return df
+
+
+def p_adjust_bh(p):
+    ## multiple hypothesis testing
+    p = np.asfarray(p)
+    by_descend = p.argsort()[::-1]
+    by_orig = by_descend.argsort()
+    steps = float(len(p)) / np.arange(len(p), 0, -1)
+    q = np.minimum(1, np.minimum.accumulate(steps * p[by_descend]))
+    return q[by_orig]
 
 
 # STEP 1: Extract required columns and split individual dpsi values, their probabilities and junction coords
@@ -37,7 +67,9 @@ voila = voila[col_list]
 voila = voila[~voila['junctions_coords'].str.contains("nan")]
 
 # FILTER 2: Drop rows with non-changing probability < 0.05
-voila = voila[pd.to_numeric(voila['probability_changing']) >= 0.95]
+voila['pval'] = 1- pd.to_numeric(voila['probability_changing'])
+voila = adjust_pvalue(voila, col='pval')
+voila = voila[pd.to_numeric(voila['adj_pval']) <= 0.05]
 
 
 # STEP 3: Get the source and target indices of splice junctions
