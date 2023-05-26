@@ -1,21 +1,45 @@
 import pandas as pd
+import os
+import json
 
 
 flank_lens = [50, 100, 200]
 junctions = pd.read_csv('0_Files/majiq_junctions.csv', delimiter='\t')
+with open('paths.json') as f:
+    d = json.load(f)
+
+fasta = d['Reference fasta']
+ref_genome= fasta+".fai"
 
 annot = []
 for length in flank_lens:
+
+        # adjust flank length to 200bp +- without exceeding chromosome bounds
+        if length < 200:
+                file = "majiq_flanks" + str(length) + ".bed"
+                adjust_size = str(200 -length)
+
+                # separate start,stop flank coords
+                os.system("cut -f 1-3 0_Files/"+  file +" > 0_Files/coords.bed")
+
+                # adjust flank boundaries
+                os.system("bedtools slop -i 0_Files/coords.bed" + " -g " + ref_genome + " -b " + adjust_size + " > 0_Files/coords_adjusted.bed")
+
+                # replace flank coords with adjusted coords
+                os.system("awk 'FNR==NR{a[NR]=$2;next}{$2=a[FNR]}1' 0_Files/coords_adjusted.bed 0_Files/" + file + " > 0_Files/adjusted_flanks.bed")
+                os.system("awk 'FNR==NR{a[NR]=$3;next}{$3=a[FNR]}1' 0_Files/coords_adjusted.bed 0_Files/adjusted_flanks.bed > 0_Files/adjusted.bed")
+                os.system("sed 's/ /\t/g' 0_Files/adjusted.bed > 0_Files/"+file)
+
+                # remove intermediate files
+                os.system("rm 0_Files/coords*.bed")
+                os.system("rm  0_Files/adjusted*.bed")
+
+
         flanks = pd.read_csv('0_Files/majiq_flanks' + str(length) + '.bed', delimiter='\t', header=None)
 
 
         # drop flanks that have no junction
         flanks = flanks[flanks[4] != -1]
-
-        # adjust flank length to 200bp +-
-        if length < 200:
-                flanks[1] -= (200 - length)
-                flanks[2] += (200 - length)
 
         # merge the flanks df with the jns df
         flanks[6] = flanks[[1, 2]].apply(lambda row: '-'.join(row.values.astype(str)), axis=1)
