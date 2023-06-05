@@ -19,10 +19,10 @@ gff3 <- GenomicFeatures::makeTxDbFromGFF(organism = "Homo sapiens",
 
 ## extract exons from the transcript database
 exons <- exons(gff3)
-exons
+
 ## convert exonsanges object into a dataframe
 df.exon <- data.frame(seqnames=seqnames(exons),
-                 starts=start(exons)-1,
+                 starts=start(exons)-1, # drop first exon
                  ends=end(exons),
                  names=c(rep(".", length(exons))),
                  scores=c(rep(".", length(exons))),
