@@ -66,7 +66,7 @@ voila = voila[col_list]
 # skipping nan -> 99464127-nan
 voila = voila[~voila['junctions_coords'].str.contains("nan")]
 
-# FILTER 2: Drop rows with non-changing probability < 0.05
+# FILTER 2: Drop rows with changing probability > 0.05
 voila['pval'] = 1- pd.to_numeric(voila['probability_changing'])
 voila = adjust_pvalue(voila, col='pval')
 voila = voila[pd.to_numeric(voila['adj_pval']) <= 0.05]
