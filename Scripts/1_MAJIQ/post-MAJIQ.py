@@ -77,7 +77,12 @@ voila = pd.concat([voila_temp, voila]).sort_index(kind='merge')
 keep_cols = ['seqid', 'junction0', 'strand']
 majiq_bed = voila[keep_cols]
 majiq_bed = majiq_bed.drop_duplicates()
-majiq_bed['junction1'] = pd.to_numeric(majiq_bed['junction0']) + 1  # to fit bedtools input requirements
-majiq_bed[['seqid', 'junction0', 'junction1', 'strand']].to_csv('0_Files/majiq.bed', index=False, sep='\t', header=False)  # input for bedtools intersect
+# to fit bedtools input requirements
+majiq_bed['junction1'] = pd.to_numeric(majiq_bed['junction0']) + 1
+majiq_bed['feature'] = "flank"
+majiq_bed['score'] = "."
+# rearrange
+majiq_bed = majiq_bed[['seqid', "junction0", "junction1", "feature", "score", "strand"]]
+majiq_bed.to_csv('0_Files/majiq.bed', index=False, sep='\t', header=False)  # input for bedtools intersect
 voila.to_csv('0_Files/majiq_junctions.csv', index=False, sep='\t', header=True)
 
