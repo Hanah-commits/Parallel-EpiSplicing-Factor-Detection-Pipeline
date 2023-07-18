@@ -9,10 +9,9 @@ ref = d['Reference genome']
 fasta = d['Reference fasta']
 
 # exon coordinates
-os.system('Rscript PreProcessing/get_exons.R')
+os.system('bash PreProcessing/get_exons.sh')
 
 # genome file
-os.system("samtools faidx " + fasta)
 ref_genome= fasta+".fai"
 
 # flanks

@@ -37,14 +37,15 @@ for length in flank_lens:
 
         flanks = pd.read_csv('0_Files/majiq_flanks' + str(length) + '.bed', delimiter='\t', header=None)
 
-
         # drop flanks that have no junction
-        flanks = flanks[flanks[4] != -1]
+        ##chrY    13359417        13360117        Exon    .       -       chrY    13359767        13359768        flank   .       - 
+        ##chr10   100041843       100042543       Exon    .       -       .       -1      -1      .       -1      . 
+
+        flanks = flanks[flanks[8] != -1]
 
         # merge the flanks df with the jns df
-        flanks[6] = flanks[[1, 2]].apply(lambda row: '-'.join(row.values.astype(str)), axis=1)
-        flanks.drop([3, 5], axis=1, inplace=True)
-
+        flanks[12] = flanks[[1, 2]].apply(lambda row: '-'.join(row.values.astype(str)), axis=1)
+        flanks.drop([3, 4, 5, 6, 8, 9, 10, 11], axis=1, inplace=True)
         flanks.set_axis(['seqid', 'start', 'stop', 'junction0', 'flanks'], axis=1, inplace=True)
 
         junctions['index'] = junctions.index
