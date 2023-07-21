@@ -10,8 +10,6 @@ The weight flag (optional) `-w` is used when the expression levels of the splici
 
 ## Installations
 
-_Note: When using a conda environemnt, check the R version for which the required R packages exist before creating the conda environment._
-
 1. Create a conda environment from the environment.yml file:
 
 ```
