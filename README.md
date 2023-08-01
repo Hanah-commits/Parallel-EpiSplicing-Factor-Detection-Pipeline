@@ -27,8 +27,6 @@ $ pip install git+https://bitbucket.org/biociphers/majiq_academic.git/voila
 4.Install the following R packages:
 
 ```
-$ GenomicFeatures
-
 # Optional: if using the weight flag `-w` , install the following R packages:
 
 $ edger
