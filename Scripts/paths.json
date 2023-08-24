@@ -1,4 +1,6 @@
 {
+"list_of_processes" : ["1", "2"],
+"1":{
 "tissue1" : "",
 "tissue2" : "",
 "Histone modifications":["", ""],
@@ -11,4 +13,19 @@
 "MAJIQ config":"",
 "RBPmap directory" : "",
 "Pipeline output":""
+},
+"2":{
+"tissue1" : "",
+"tissue2" : "",
+"Histone modifications":["", ""],
+"RNASeq files":"",
+"strandedness":"",
+"ChIPSeq files":"",
+"Reference genome":"",
+"Reference fasta":"",
+"threads":"",
+"MAJIQ config":"",
+"RBPmap directory" : "",
+"Pipeline output":""
+}
 }
