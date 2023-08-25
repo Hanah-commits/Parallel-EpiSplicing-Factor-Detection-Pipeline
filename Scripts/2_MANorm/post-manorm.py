@@ -1,7 +1,17 @@
 import pandas as pd
 import numpy as np
 import json
-import sys
+from argparse import ArgumentParser
+
+# Get the process name, use it in the output directory
+
+p = ArgumentParser()
+p.add_argument("output_dir")
+p.add_argument("--process", "-p",
+    help="The name of the process")
+
+args = p.parse_args()
+proc = args.process
 
 def adjust_pvalue(df, col):
 
@@ -32,16 +42,17 @@ def p_adjust_bh(p):
     return q[by_orig]
 
 
-prefix = sys.argv[1] + 'MANorm/'
+prefix = args.output_dir + 'MANorm/'
 
 with open('paths.json') as f:
-    d = json.load(f)
+    data = json.load(f)
+d = data[proc]
 
 hms = d["Histone modifications"]
 peaksfiles = [hm+'_flanks.bed' for hm in hms]
 peak_dfs = []
 
-flanks = pd.read_csv('0_Files/filtered_flanks.bed', delimiter='\t', header=None)
+flanks = pd.read_csv(f'{proc}_0_Files/filtered_flanks.bed', delimiter='\t', header=None)
 flanks.columns = ['seqid', 'start', 'stop']
 flanks['flanks'] = flanks[['start', 'stop']].apply(lambda row: '-'.join(row.values.astype(str)), axis=1)
 flanks.drop_duplicates(inplace=True)
@@ -90,4 +101,4 @@ peak_dfs = [df.set_index('flanks') for df in peak_dfs]
 peak_dfs = pd.concat(peak_dfs, axis=1)
 peak_dfs = peak_dfs.loc[~(peak_dfs==0).all(axis=1)]
 
-peak_dfs.to_csv('0_Files/Filtered_MValues.csv', sep='\t')
+peak_dfs.to_csv(f'{proc}_0_Files/Filtered_MValues.csv', sep='\t')

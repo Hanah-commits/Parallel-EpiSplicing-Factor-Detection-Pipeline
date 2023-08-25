@@ -77,7 +77,7 @@ def master_function(proc, output_dir):
 
     # STEP 6: BEDTools - Annotate exon flanks with MANorm peaks
     try:
-        os.system('python 2_MANorm/annotate-MANorm.py ' + output_dir)
+        os.system(f'python 2_MANorm/annotate-MANorm.py {output_dir} -p {proc}')
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
@@ -85,7 +85,7 @@ def master_function(proc, output_dir):
 
     # STEP 7: Process peak-annotated flanks
     try:
-        os.system("python 2_MANorm/post-manorm.py " + output_dir)
+        os.system(f"python 2_MANorm/post-manorm.py {output_dir} -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
@@ -93,7 +93,7 @@ def master_function(proc, output_dir):
 
     # STEP 8: DEU - DHM Correlation
     try:
-        exec(open("3_Episplicing/correlation.py").read())
+        os.system(f"3_Episplicing/correlation.py -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)

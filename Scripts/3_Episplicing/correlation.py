@@ -5,6 +5,14 @@ import numpy as np
 from scipy.stats import pearsonr
 from scipy.stats import rankdata
 import matplotlib.pyplot as plt
+from argparse import ArgumentParser
+
+# Get the process name, use it in the output directory
+def get_argument_parser():
+    p = ArgumentParser()
+    p.add_argument("--process", "-p",
+        help="The name of the process")
+    return p
 
 
 def pearsonr_pval(x, y):
@@ -98,15 +106,20 @@ def find_epigenes(df, corr_genes):
 
 
 
-if __name__ == "__main__":
+def main(args):
+
+    proc = args.process
 
     with open('paths.json') as f:
-        d = json.load(f)
+        data = json.load(f)
+    d = data[proc]
+
+    tmp_out_dir = proc + '_0_Files'
 
     hms = d["Histone modifications"]
 
-    dPSI = pd.read_csv('0_Files/Filtered_dPSI.csv', delimiter='\t')
-    peaks = pd.read_csv('0_Files/Filtered_MValues.csv', delimiter='\t')
+    dPSI = pd.read_csv(f'{tmp_out_dir}/Filtered_dPSI.csv', delimiter='\t')
+    peaks = pd.read_csv(f'{tmp_out_dir}/Filtered_MValues.csv', delimiter='\t')
     dPSI.drop_duplicates(inplace=True)
     peaks.drop_duplicates(inplace=True)
     flanks = pd.merge(dPSI, peaks, how="outer")
@@ -133,8 +146,8 @@ if __name__ == "__main__":
     coeff = filtered_flanks.groupby('gene_id').corr(method=pearsonr_coeff)
 
     # internal column filtering
-    coeff.to_csv('0_Files/coeff.csv', sep='\t')
-    coeff = pd.read_csv('0_Files/coeff.csv', delimiter='\t')
+    coeff.to_csv(f'{tmp_out_dir}/coeff.csv', sep='\t')
+    coeff = pd.read_csv(f'{tmp_out_dir}/coeff.csv', delimiter='\t')
     coeff.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True)
     
     # dropping p-values of hm-hm correlations
@@ -156,8 +169,8 @@ if __name__ == "__main__":
     # Step 2: Keep only relevant correlations
 
     # internal column filtering
-    pval.to_csv('0_Files/pvals.csv', sep='\t')
-    pval = pd.read_csv('0_Files/pvals.csv', delimiter='\t')
+    pval.to_csv(f'{tmp_out_dir}/pvals.csv', sep='\t')
+    pval = pd.read_csv(f'{tmp_out_dir}/pvals.csv', delimiter='\t')
     pval.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True)
 
     # dropping p-values of hm-hm correlations
@@ -183,10 +196,16 @@ if __name__ == "__main__":
 
 
     # get flanks of epispliced genes
-    flanks[flanks['gene_id'].isin(epigenes)].to_csv('0_Files/dPSI_Mval_epi.csv', sep='\t', index=False)
+    flanks[flanks['gene_id'].isin(epigenes)].to_csv(f'{tmp_out_dir}/dPSI_Mval_epi.csv', sep='\t', index=False)
 
     # # get flanks of non-epispliced genes
-    flanks[flanks['gene_id'].isin(non_epi)].to_csv('0_Files/dPSI_Mval_nonepi.csv', sep='\t', index=False)
+    flanks[flanks['gene_id'].isin(non_epi)].to_csv(f'{tmp_out_dir}/dPSI_Mval_nonepi.csv', sep='\t', index=False)
 
     #clean-up
-    os.remove('0_Files/pvals.csv')
+    os.remove(f'{tmp_out_dir}/pvals.csv')
+
+
+if __name__ == "__main__":    
+      p = get_argument_parser()
+      args = p.parse_args()
+      main(args)
