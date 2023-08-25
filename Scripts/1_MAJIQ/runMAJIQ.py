@@ -1,13 +1,21 @@
 import os
-import sys
 import json
 from pathlib import Path
+from argparse import ArgumentParser
 
-if __name__ == "__main__":
+# Get the process name, use it in the output directory
+def get_argument_parser():
+    p = ArgumentParser()
+    p.add_argument("output_dir")
+    p.add_argument("--process", "-p",
+        help="The name of the process")
+    return p
 
-      
+def main(args):
+      proc = args.process
       with open('paths.json') as f:
-            d = json.load(f)
+            data = json.load(f)
+      d = data[proc]
 
       majiq_files = d['RNASeq files']
       ref = d['Reference genome']
@@ -19,7 +27,7 @@ if __name__ == "__main__":
 
       currdir = os.getcwd()
       
-      output = sys.argv[1] + 'MAJIQ/'
+      output = args.output_dir + 'MAJIQ/'
       build_output = output+'build/'
       tissue1_output = output+'psi_tissue1/'
       tissue2_output = output+'psi_tissue2/'
@@ -64,6 +72,7 @@ if __name__ == "__main__":
       os.system('voila tsv ' + build_output + 'splicegraph.sql ' + deltapsi_output + tissue1+'-'+tissue2 +'.deltapsi.voila' +' -f ' + output + 'majiq_output')
 
 
-
-
-    
+if __name__ == "__main__":    
+      p = get_argument_parser()
+      args = p.parse_args()
+      main(args)

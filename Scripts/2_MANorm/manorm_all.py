@@ -1,12 +1,23 @@
 import os
 import json
-import sys
 from pathlib import Path
+from argparse import ArgumentParser
 
-if __name__ == "__main__":
+# Get the process name, use it in the output directory
+def get_argument_parser():
+    p = ArgumentParser()
+    p.add_argument("output_dir")
+    p.add_argument("--process", "-p",
+        help="The name of the process")
+    return p
+
+
+def main(args):
+    proc = args.process
 
     with open('paths.json') as f:
-            d = json.load(f)
+            data = json.load(f)
+    d = data[proc]
 
     manorm_files = d['ChIPSeq files']
     hms = d["Histone modifications"]
@@ -14,7 +25,7 @@ if __name__ == "__main__":
     tissue2 = d["tissue2"]
 
     currdir = os.getcwd()
-    opdir = sys.argv[1] + 'MANorm/'
+    opdir = args.output_dir + 'MANorm/'
     Path(opdir).mkdir(parents=True, exist_ok=True)
 
     os.chdir(manorm_files)
@@ -24,3 +35,9 @@ if __name__ == "__main__":
         os.system('manorm --p1 ' + hm + '_'+tissue1+'_peak.bed --p2 ' + hm + '_'+tissue2+'_peak.bed --r1 ' + hm + '_'+tissue1+'_alignment.bed --r2 ' + hm + '_'+tissue2+'_alignment.bed -o ' + opdir)
 
     os.chdir(currdir)
+
+
+if __name__ == "__main__":    
+      p = get_argument_parser()
+      args = p.parse_args()
+      main(args)

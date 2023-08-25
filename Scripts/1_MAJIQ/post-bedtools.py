@@ -1,12 +1,24 @@
 import pandas as pd
 import os
 import json
+from argparse import ArgumentParser
+
+# Get the process name, use it in the output directory
+
+p = ArgumentParser()
+p.add_argument("--process", "-p",
+help="The name of the process")
+args = p.parse_args()
+proc = args.process
+
+tmp_out_dir = proc + '_0_Files'
 
 
 flank_lens = [50, 100, 200]
-junctions = pd.read_csv('0_Files/majiq_junctions.csv', delimiter='\t')
+junctions = pd.read_csv(f'{tmp_out_dir}/majiq_junctions.csv', delimiter='\t')
 with open('paths.json') as f:
-    d = json.load(f)
+    data = json.load(f)
+d = data[proc]
 
 fasta = d['Reference fasta']
 ref_genome= fasta+".fai"
@@ -20,22 +32,22 @@ for length in flank_lens:
                 adjust_size = str(200 -length)
 
                 # separate start,stop flank coords
-                os.system("cut -f 1-3 0_Files/"+  file +" > 0_Files/coords.bed")
+                os.system(f"cut -f 1-3 {tmp_out_dir}/{file} > {tmp_out_dir}/coords.bed")
 
                 # adjust flank boundaries
-                os.system("bedtools slop -i 0_Files/coords.bed" + " -g " + ref_genome + " -b " + adjust_size + " > 0_Files/coords_adjusted.bed")
+                os.system(f"bedtools slop -i {tmp_out_dir}/coords.bed" + " -g " + ref_genome + " -b " + adjust_size + f" > {tmp_out_dir}/coords_adjusted.bed")
 
                 # replace flank coords with adjusted coords
-                os.system("awk 'FNR==NR{a[NR]=$2;next}{$2=a[FNR]}1' 0_Files/coords_adjusted.bed 0_Files/" + file + " > 0_Files/adjusted_flanks.bed")
-                os.system("awk 'FNR==NR{a[NR]=$3;next}{$3=a[FNR]}1' 0_Files/coords_adjusted.bed 0_Files/adjusted_flanks.bed > 0_Files/adjusted.bed")
-                os.system("sed 's/ /\t/g' 0_Files/adjusted.bed > 0_Files/"+file)
+                os.system("awk 'FNR==NR{a[NR]=$2;next}{$2=a[FNR]}1' " + f"{tmp_out_dir}/coords_adjusted.bed {tmp_out_dir}/" + file + f" > {tmp_out_dir}/adjusted_flanks.bed")
+                os.system("awk 'FNR==NR{a[NR]=$3;next}{$3=a[FNR]}1' " + f"{tmp_out_dir}/coords_adjusted.bed {tmp_out_dir}/adjusted_flanks.bed > {tmp_out_dir}/adjusted.bed")
+                os.system(f"sed 's/ /\t/g' {tmp_out_dir}/adjusted.bed > {tmp_out_dir}/{file}")
 
                 # remove intermediate files
-                os.system("rm 0_Files/coords*.bed")
-                os.system("rm  0_Files/adjusted*.bed")
+                os.system(f"rm {tmp_out_dir}/coords*.bed")
+                os.system(f"rm  {tmp_out_dir}/adjusted*.bed")
 
 
-        flanks = pd.read_csv('0_Files/majiq_flanks' + str(length) + '.bed', delimiter='\t', header=None)
+        flanks = pd.read_csv(f'{tmp_out_dir}/majiq_flanks' + str(length) + '.bed', delimiter='\t', header=None)
 
         # drop flanks that have no junction
         ##chrY    13359417        13360117        Exon    .       -       chrY    13359767        13359768        flank   .       - 
@@ -88,10 +100,10 @@ flank_jns_group = flank_jns_group[['gene_id', 'lsv_id', 'seqid', 'junction0', 'm
         'probability_changing', 'flanks', 'start', 'stop', 'strand']]
 
 # Get all filtered flanks
-flank_jns_group.drop_duplicates().to_csv('0_Files/all_flanks.csv', sep='\t', index=False)
+flank_jns_group.drop_duplicates().to_csv(f'{tmp_out_dir}/all_flanks.csv', sep='\t', index=False)
 
 # Get new annotation file with flanks (to annotate MANorm peaks)
-flank_jns_group[['seqid', 'start', 'stop']].drop_duplicates().to_csv('0_Files/filtered_flanks.bed', index=False, sep='\t', header=False)
+flank_jns_group[['seqid', 'start', 'stop']].drop_duplicates().to_csv(f'{tmp_out_dir}/filtered_flanks.bed', index=False, sep='\t', header=False)
 
 # Get dPSI values of filtered flanks
-flank_jns_group[['flanks', 'gene_id', 'mean_dpsi_per_lsv_junction']].drop_duplicates().to_csv('0_Files/Filtered_dPSI.csv', index=False, sep='\t')
+flank_jns_group[['flanks', 'gene_id', 'mean_dpsi_per_lsv_junction']].drop_duplicates().to_csv(f'{tmp_out_dir}/Filtered_dPSI.csv', index=False, sep='\t')

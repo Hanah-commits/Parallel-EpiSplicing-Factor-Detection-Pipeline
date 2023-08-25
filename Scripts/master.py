@@ -20,8 +20,8 @@ def master_function(proc, output_dir):
     # Differential Expression Analysis
     if weights:
         try:
-            exec(open("PreProcessing/featureCounts.py").read())
-            os.system("Rscript PreProcessing/Limma.R")
+            os.system(f"PreProcessing/featureCounts.py -p {proc}")
+            os.system(f"Rscript PreProcessing/Limma.R {proc}")
         except Exception as ex:
             print(ex)
             move_dirs(output_dir)
@@ -29,7 +29,7 @@ def master_function(proc, output_dir):
 
     # Prepare flank reference : 50, 100, 200 bp
     try:
-        os.system("python PreProcessing/prepare_FlanksRef.py")
+        os.system(f"python PreProcessing/prepare_FlanksRef.py -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
@@ -37,7 +37,7 @@ def master_function(proc, output_dir):
 
     # STEP 1: Execute MAJIQ - Differential Exon Usage
     try:
-        os.system("python 1_MAJIQ/runMAJIQ.py " + output_dir)
+        os.system(f"python 1_MAJIQ/runMAJIQ.py {output_dir} -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
@@ -45,7 +45,7 @@ def master_function(proc, output_dir):
 
     # STEP 2: Execute MANorm -  Differential Histone Modifications
     try:
-        os.system("python 2_MANorm/manorm_all.py " + output_dir)
+        os.system(f"python 2_MANorm/manorm_all.py {output_dir} -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
@@ -53,7 +53,7 @@ def master_function(proc, output_dir):
 
     # STEP 3: Process MAJIQ output
     try:
-        os.system("python 1_MAJIQ/post-MAJIQ.py " + output_dir)
+        os.system(f"python 1_MAJIQ/post-MAJIQ.py {output_dir} -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
@@ -61,7 +61,7 @@ def master_function(proc, output_dir):
 
     # STEP 4: BEDTools - Annotate exon flanks with MAJIQ junctions
     try:
-        exec(open("1_MAJIQ/annotate-MAJIQ.py").read())
+        os.system(f"1_MAJIQ/annotate-MAJIQ.py -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
@@ -69,7 +69,7 @@ def master_function(proc, output_dir):
 
     # STEP 5: Process BEDTools output
     try:
-        exec(open("1_MAJIQ/post-bedtools.py").read())
+        os.system(f"1_MAJIQ/post-bedtools.py -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
