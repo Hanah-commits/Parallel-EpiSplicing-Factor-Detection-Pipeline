@@ -3,8 +3,17 @@ import math
 import json
 import numpy as np
 from scipy import stats
+from argparse import ArgumentParser
 
+# Get the process name, use it in the output directory
+def get_argument_parser():
+    p = ArgumentParser()
+    p.add_argument("output_dir")
+    p.add_argument("--process", "-p",
+        help="The name of the process")
+    return p
 
+# So these lines are ignored when the script is called via os.system
 epi = pd.read_csv('0_Files/features_epi.csv', delimiter='\t')
 nonepi = pd.read_csv('0_Files/features_nonepi.csv', delimiter='\t')
 
@@ -70,13 +79,13 @@ def p_adjust_bh(p):
     return q[by_orig]
 
 
-def significane_test(test):
+def significane_test(test, proc):
 
     prob_dict = {}
     # sfs = ['BRUNOL4', 'BRUNOL5', 'BRUNOL6', 'DAZAP1', 'ESRP2', 'FMR1', 'FUS', 'FXR1', 'FXR2', 'HNRNPA1', 'HNRNPA1L2', 'HNRNPA2B1', 'HNRNPC', 'HNRNPF', 'HNRNPH1', 'HNRNPH2', 'HNRNPK', 'HNRNPL', 'HNRNPM', 'HNRNPU', 'HuR', 'KHDRBS1', 'KHDRBS2', 'KHDRBS3', 'MBNL1', 'PABPC1', 'PABPN1', 'PCBP1', 'PCBP2', 'QKI', 'RALY', 'RBFOX1', 'RBM24', 'RBM28', 'RBM3', 'RBM4', 'RBM42', 'RBM5', 'RBM8A', 'SART3', 'SFPQ', 'SNRNP70', 'SNRPA', 'SRSF1', 'SRSF10', 'SRSF2', 'SRSF7', 'SRSF9', 'TARDBP', 'TIA1', 'U2AF2', 'YBX1', 'ZC3H10', 'ZCRB1', 'ZNF638']
 
     if test == 'binomial':
-        epi_pvals = pd.read_csv('0_Files/pvals_rbpepi.csv', delimiter='\t')[sfs]
+        epi_pvals = pd.read_csv(f'{proc}_0_Files/pvals_rbpepi.csv', delimiter='\t')[sfs]
         epi_pvals = adjust_pvalue(epi_pvals)
 
         p =0.5 #probability of success in one trial
@@ -316,11 +325,11 @@ def significane_test(test):
     print('RBPs enriched in non-epigene flanks ', len(enriched_nonepi))
     print('###############################')
 
-    with open('0_Files/enriched_epi.txt', 'w') as f:
+    with open(f'{proc}_0_Files/enriched_epi.txt', 'w') as f:
         for rbp in enriched_epi:
             f.write(f"{rbp}\n")
 
-    with open('0_Files/enriched_nonepi.txt', 'w') as f:
+    with open(f'{proc}_0_Files/enriched_nonepi.txt', 'w') as f:
         for rbp in enriched_nonepi:
             f.write(f"{rbp}\n")
             
@@ -328,5 +337,6 @@ def significane_test(test):
 
 
 if __name__ == "__main__":
-
+    p = get_argument_parser()
+    args = p.parse_args()
     significane_test("welch")

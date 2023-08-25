@@ -94,6 +94,6 @@ def check_args():
     return procs, output_dirs
 
 
-def move_dirs(output_dir):
-    shutil.move('0_Files/', output_dir)
+def move_dirs(output_dir, proc):
+    shutil.move(f'{proc}_0_Files/', output_dir)
     shutil.move('../RBPmap/', output_dir)

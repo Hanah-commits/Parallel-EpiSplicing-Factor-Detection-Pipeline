@@ -1,11 +1,22 @@
 import pandas as pd
-import sys
+from argparse import ArgumentParser
 
-prefix = '0_Files/'
+# Get the process name, use it in the output directory
+
+p = ArgumentParser()
+p.add_argument("output_dir")
+p.add_argument("weights")
+p.add_argument("--process", "-p",
+    help="The name of the process")
+args = p.parse_args()
+
+proc = args.process
+
+prefix = f'{proc}_0_Files/'
 unscaled = ['features_epi.csv', 'features_nonepi.csv', 'all_features.csv']
 scaled = ['features_scaled_epi.csv', 'features_scaled_nonepi.csv', 'all_features_scaled.csv']
 
-if sys.argv[1] == 'True':
+if args.weights == 'True':
     types = [unscaled, scaled]
 else:
     types = [unscaled]

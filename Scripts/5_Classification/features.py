@@ -1,16 +1,21 @@
 import pandas as pd
 import sys
 import matplotlib.pyplot as plt
+from argparse import ArgumentParser
 
-output_dir = sys.argv[1]
-if sys.argv[2] == 'True':
-    weights = True
-else:
-    weights = False
+# Get the process name, use it in the output directory
+def get_argument_parser():
+    p = ArgumentParser()
+    p.add_argument("output_dir")
+    p.add_argument("weights")
+    p.add_argument("--process", "-p",
+        help="The name of the process")
+    return p
 
-def feature_matrix(filename1, filename2, filename3, weighted=False):
 
-    prefix = '0_Files/'
+def feature_matrix(filename1, filename2, filename3, output_dir, proc, weighted=False):
+
+    prefix = f'{proc}_0_Files/'
     features = pd.read_csv(prefix+filename1, delimiter='\t')
     rbp = pd.read_csv(prefix+filename2, delimiter=',')
 
@@ -44,14 +49,14 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     cols = cols[-1:] + cols[:-1]
     features = features[cols]
 
-    with open('0_Files/' + name+'genes.txt', 'w') as f:
+    with open(f'{prefix}{name}genes.txt', 'w') as f:
         for item in set(features['gene'].values.tolist()):
             f.write("%s\n" % item)
 
     if weighted:
-        features.to_csv('0_Files/features_scaled_' + name + '.csv', sep='\t', index=False)
+        features.to_csv(f'{prefix}features_scaled_' + name + '.csv', sep='\t', index=False)
     else:
-        features.to_csv('0_Files/features_' + name + '.csv', sep='\t', index=False)
+        features.to_csv(f'{prefix}features_' + name + '.csv', sep='\t', index=False)
 
 
 
@@ -60,7 +65,13 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     # plt.show()
 
 
-if __name__ == "__main__":
+def main(args):
+    proc = args.process
+    output_dir = args.output_dir
+    if args.weights == 'True':
+        weights = True
+    else:
+        weights = False
 
     dPSI_Mval_files = ['dPSI_Mval_epi.csv', 'dPSI_Mval_nonepi.csv']
     Zscore_files = ['FilteredZscores_epi.csv', 'FilteredZscores_nonepi.csv']
@@ -68,14 +79,15 @@ if __name__ == "__main__":
     query_files = ['query_flanks_epi.csv', 'query_flanks_nonepi.csv']
 
     for i in range(len(query_files)):
-        feature_matrix(dPSI_Mval_files[i], Zscore_files[i], query_files[i], weighted=False)
+        feature_matrix(dPSI_Mval_files[i], Zscore_files[i], query_files[i], output_dir, proc, weighted=False)
 
     if weights:
         
         for i in range(len(query_files)):
-            feature_matrix(dPSI_Mval_files[i], logFCZscore_files[i], query_files[i], weighted=True)
+            feature_matrix(dPSI_Mval_files[i], logFCZscore_files[i], query_files[i], output_dir, proc, weighted=True)
 
 
-
-
-
+if __name__ == "__main__":    
+      p = get_argument_parser()
+      args = p.parse_args()
+      main(args)

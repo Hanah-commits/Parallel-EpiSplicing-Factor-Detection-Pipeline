@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import sys
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 import matplotlib.pyplot as plt
@@ -8,11 +7,20 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import roc_curve
 from collections import defaultdict
 from functools import reduce
+from argparse import ArgumentParser
+
+# Get the process name, use it in the output directory
+def get_argument_parser():
+    p = ArgumentParser()
+    p.add_argument("output_dir")
+    p.add_argument("--process", "-p",
+        help="The name of the process")
+    return p
 
 
-def stratified_classifier(output_dir):
+def stratified_classifier(output_dir, proc):
 
-    features = pd.read_csv('0_Files/all_features.csv', delimiter='\t')
+    features = pd.read_csv(f'{proc}_0_Files/all_features.csv', delimiter='\t')
 
 
     sf = ['BRUNOL4', 'BRUNOL5', 'BRUNOL6', 'DAZAP1', 'ESRP2', 'FMR1', 'FUS', 'FXR1', 'FXR2', 'HNRNPA1', 'HNRNPA1L2', 'HNRNPA2B1', 'HNRNPC', 'HNRNPF', 'HNRNPH1', 'HNRNPH2', 'HNRNPK', 'HNRNPL', 'HNRNPM', 'HNRNPU', 'HuR', 'KHDRBS1', 'KHDRBS2', 'KHDRBS3', 'MBNL1', 'PABPC1', 'PABPN1', 'PCBP1', 'PCBP2', 'PTB3', 'QKI', 'RALY', 'RBFOX1', 'RBM24', 'RBM28', 'RBM3', 'RBM4', 'RBM42', 'RBM5', 'RBM8A', 'SART3', 'SFPQ', 'SNRNP70', 'SNRPA', 'SRSF1', 'SRSF10', 'SRSF2', 'SRSF7', 'SRSF9', 'TARDBP', 'TIA1', 'U2AF2', 'YBX1', 'ZC3H10', 'ZCRB1', 'ZNF638']
@@ -59,7 +67,7 @@ def stratified_classifier(output_dir):
     mean_gini = gini_scores.mean(axis=0).sort_values(ascending=False)
     print('Gini Scores: ')
     print(mean_gini)
-    mean_gini.to_csv('0_Files/impt_features.csv', sep='\t')
+    mean_gini.to_csv(f'{proc}_0_Files/impt_features.csv', sep='\t')
     
 
     tprs = np.array(tprs)
@@ -84,4 +92,6 @@ def stratified_classifier(output_dir):
 
 
 if __name__ == "__main__":
-    stratified_classifier(output_dir=sys.argv[1])
+    p = get_argument_parser()
+    args = p.parse_args()
+    stratified_classifier(args.output_dir, args.process)
