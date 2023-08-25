@@ -2,6 +2,14 @@ import csv
 import pandas as pd
 import numpy as np
 import os
+from argparse import ArgumentParser
+
+# Get the process name, use it in the output directory
+def get_argument_parser():
+    p = ArgumentParser()
+    p.add_argument("--process", "-p",
+        help="The name of the process")
+    return p
 
 def adjust_pvalue(df, col):
 
@@ -32,7 +40,7 @@ def p_adjust_bh(p):
     return q[by_orig]
 
 
-def process_results(result_dirs, type):
+def process_results(result_dirs, type, proc):
     proteins = ['BRUNOL4(Hs/Mm)', 'BRUNOL5(Hs/Mm)', 'BRUNOL6(Hs/Mm)', 'DAZAP1(Hs/Mm)', 'ESRP2(Hs/Mm)', 'FMR1(Hs/Mm)', 'FUS(Hs/Mm)', 'FXR1(Hs/Mm)', 'FXR2(Hs/Mm)', 'HNRNPA1(Hs/Mm)', 'HNRNPA1L2(Hs/Mm)', 'HNRNPA2B1(Hs/Mm)', 'HNRNPC(Hs/Mm)', 'HNRNPF(Hs/Mm)', 'HNRNPH1(Hs/Mm)', 'HNRNPH2(Hs/Mm)', 'HNRNPK(Hs/Mm)', 'HNRNPL(Hs/Mm)', 'HNRNPM(Hs/Mm)', 'HNRNPU(Hs/Mm)', 'HuR(Hs/Mm)', 'KHDRBS1(Hs/Mm)', 'KHDRBS2(Hs/Mm)', 'KHDRBS3(Hs/Mm)', 'MBNL1(Hs/Mm)', 'PABPC1(Hs/Mm)', 'PABPN1(Hs/Mm)', 'PCBP1(Hs/Mm)', 'PCBP2(Hs/Mm)', 'PTB3(Hs/Mm)', 'QKI(Hs/Mm)', 'RALY(Hs/Mm)', 'RBFOX1(Hs/Mm)', 'RBM24(Hs/Mm)', 'RBM28(Hs/Mm)', 'RBM3(Hs/Mm)', 'RBM4(Hs/Mm)', 'RBM42(Hs/Mm)', 'RBM5(Hs/Mm)', 'RBM8A(Hs/Mm)', 'SART3(Hs/Mm)', 'SFPQ(Hs/Mm)', 'SNRNP70(Hs/Mm)', 'SNRPA(Hs/Mm)', 'SRSF1(Hs/Mm)', 'SRSF10(Hs/Mm)', 'SRSF2(Hs/Mm)', 'SRSF7(Hs/Mm)', 'SRSF9(Hs/Mm)', 'TARDBP(Hs/Mm)', 'TIA1(Hs/Mm)', 'U2AF2(Hs/Mm)', 'YBX1(Hs/Mm)', 'ZC3H10(Hs/Mm)', 'ZCRB1(Hs/Mm)', 'ZNF638(Hs/Mm)']
     dfs_collection = []
 
@@ -128,27 +136,30 @@ def process_results(result_dirs, type):
     zscore_collection.insert(0, col_names)
     pval_collection.insert(0,  col_names)
 
-    with open("0_Files/FilteredZscores_" + type + ".csv", "w", newline="") as f:
+    with open(f"{proc}_0_Files/FilteredZscores_" + type + ".csv", "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(zscore_collection)
 
-    with open("0_Files/FilteredPvalues_" + type + ".csv", "w", newline="") as f:
+    with open(f"{proc}_0_Files/FilteredPvalues_" + type + ".csv", "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(pval_collection)
 
 
-
-
-
-if __name__ == "__main__":
+def main(args):
+    proc = args.process
     path = '../RBPmap'
     results_dirs = [x[0] for x in os.walk(path)]
     epi_dirs = [p for p in results_dirs if 'resultsrbp_input_epi' in p and 'sequence' in p]
     nonepi_dirs = [p for p in results_dirs if 'resultsrbp_input_nonepi' in p and 'sequence' in p]
 
-    process_results(epi_dirs, 'epi')
-    process_results(nonepi_dirs, 'nonepi')
+    process_results(epi_dirs, 'epi', proc)
+    process_results(nonepi_dirs, 'nonepi', proc)
 
     print('processed')
 
+
+if __name__ == "__main__":    
+      p = get_argument_parser()
+      args = p.parse_args()
+      main(args)
 

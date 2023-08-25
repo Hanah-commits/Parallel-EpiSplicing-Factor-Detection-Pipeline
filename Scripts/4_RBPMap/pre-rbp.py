@@ -1,9 +1,21 @@
 import pandas as pd
 import os
+from argparse import ArgumentParser
 
-flanks = pd.read_csv('0_Files/all_flanks.csv', delimiter='\t')
-epigene_flanks = pd.read_csv('0_Files/dPSI_Mval_epi.csv', delimiter='\t')
-nonepigene_flanks = pd.read_csv('0_Files/dPSI_Mval_nonepi.csv', delimiter='\t')
+# Get the process name, use it in the output directory
+
+p = ArgumentParser()
+p.add_argument("--process", "-p",
+    help="The name of the process")
+
+args = p.parse_args()
+proc = args.process
+
+tmp_out_dir = proc + '_0_Files'
+
+flanks = pd.read_csv(f'{tmp_out_dir}/all_flanks.csv', delimiter='\t')
+epigene_flanks = pd.read_csv(f'{tmp_out_dir}/dPSI_Mval_epi.csv', delimiter='\t')
+nonepigene_flanks = pd.read_csv(f'{tmp_out_dir}/dPSI_Mval_nonepi.csv', delimiter='\t')
 
 epi_flanks = flanks[flanks['flanks'].isin(list(set(epigene_flanks['flanks'].values)))]
 nonepi_flanks = flanks[flanks['flanks'].isin(list(set(nonepigene_flanks['flanks'].values)))]
@@ -39,8 +51,8 @@ while n < len(nonepi_flanks):
         i += 1
 
 # # get flanks for feature matrix preparation step
-epi_flanks[['gene_id', 'flanks']].to_csv('0_Files/query_flanks_epi.csv', sep='\t', index=False)
-nonepi_flanks[['gene_id', 'flanks']].to_csv('0_Files/query_flanks_nonepi.csv', sep='\t', index=False)
+epi_flanks[['gene_id', 'flanks']].to_csv(f'{tmp_out_dir}/query_flanks_epi.csv', sep='\t', index=False)
+nonepi_flanks[['gene_id', 'flanks']].to_csv(f'{tmp_out_dir}/query_flanks_nonepi.csv', sep='\t', index=False)
 
 input_files = [os.getcwd() + '/' + file for file in input_files]
 with open('../RBPmap/input.txt', 'w') as f:

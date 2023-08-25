@@ -1,6 +1,17 @@
 import pandas as pd
+from argparse import ArgumentParser
 
-logFC_Scores = pd.read_csv('0_Files/logFC.csv', delimiter='\t',
+# Get the process name, use it in the output directory
+
+p = ArgumentParser()
+p.add_argument("--process", "-p",
+    help="The name of the process")
+
+args = p.parse_args()
+proc = args.process
+tmp_out_dir = proc + '_0_Files'
+
+logFC_Scores = pd.read_csv(f'{tmp_out_dir}/logFC.csv', delimiter='\t',
                            header=None, names=['Gene stable ID', 'logFC'])
 names = pd.read_csv('HelperFunctions/GeneID_Name.csv', delimiter='\t')
 
@@ -22,4 +33,4 @@ logFC_Scores['Gene name'] = logFC_Scores['Gene name'].replace({'CELF4': 'BRUNOL4
                                                                'CELF6': 'BRUNOL6',
                                                                'ELAVL1': 'HuR'})
 logFC_Scores[['Gene name', 'logFC']].to_csv(
-    '0_Files/rbp_logFC.csv', sep='\t', index=False, header=['rbp', 'logFC'])
+    f'{tmp_out_dir}/rbp_logFC.csv', sep='\t', index=False, header=['rbp', 'logFC'])

@@ -101,7 +101,7 @@ def master_function(proc, output_dir):
 
     # STEP 9: Prepare RBPmap input
     try:
-        exec(open("4_RBPMap/pre-rbp.py").read())
+        os.system(f"4_RBPMap/pre-rbp.py -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
@@ -109,7 +109,7 @@ def master_function(proc, output_dir):
 
     # STEP 10: Execute RBPmap
     try:
-        exec(open("4_RBPMap/run_rbpmap.py").read())
+        os.system(f"4_RBPMap/run_rbpmap.py -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
@@ -117,14 +117,14 @@ def master_function(proc, output_dir):
 
     # STEP 11: Process RBPMap output
     try:
-        exec(open("4_RBPMap/post-rbp.py").read())
+        os.system(f"4_RBPMap/post-rbp.py -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
         sys.exit(1)
 
     try:    
-        exec(open("5_Classification/rbp_pvals.py").read())
+        os.system(f"5_Classification/rbp_pvals.py -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir)
@@ -133,8 +133,8 @@ def master_function(proc, output_dir):
     # STEP 12: Add logFC weights to binding scores from RBPMap
     if weights:
         try:
-            exec(open("PreProcessing/get_weights.py").read())
-            exec(open("4_RBPMap/rbp-weights.py").read())
+            os.system(f"PreProcessing/get_weights.py -p {proc}")
+            os.system(f"4_RBPMap/rbp-weights.py -p {proc}")
         except Exception as ex:
             print(ex)
             move_dirs(output_dir)

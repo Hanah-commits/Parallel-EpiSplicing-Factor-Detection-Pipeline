@@ -1,8 +1,16 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from argparse import ArgumentParser
+
+# Get the process name, use it in the output directory
+def get_argument_parser():
+    p = ArgumentParser()
+    p.add_argument("--process", "-p",
+        help="The name of the process")
+    return p
 
 
-def feature_matrix(filename1, filename2, filename3, weighted=False):
+def feature_matrix(filename1, filename2, filename3, proc, weighted=False):
     features = pd.read_csv(filename1, delimiter='\t')
     features.fillna(0, inplace=True)  # non-epigene flanks with no annotated peaks
     
@@ -36,19 +44,21 @@ def feature_matrix(filename1, filename2, filename3, weighted=False):
     cols = cols[-1:] + cols[:-1]
     features = features[cols]
 
-    features.to_csv('0_Files/pvals_rbp' + name + '.csv', sep='\t', index=False)
+    features.to_csv(f'{proc}_0_Files/pvals_rbp' + name + '.csv', sep='\t', index=False)
 
 
-if __name__ == "__main__":
-
-    dPSI_Mval_files = ['0_Files/dPSI_Mval_epi.csv', '0_Files/dPSI_Mval_nonepi.csv']
-    Zscore_files = ['0_Files/FilteredPvalues_epi.csv', '0_Files/FilteredPvalues_nonepi.csv']
-    query_files = ['0_Files/query_flanks_epi.csv', '0_Files/query_flanks_nonepi.csv']
+def main(args):
+    proc = args.process
+    tmp_out_dir = proc + '_0_Files'
+    dPSI_Mval_files = [f'{tmp_out_dir}/dPSI_Mval_epi.csv', f'{tmp_out_dir}/dPSI_Mval_nonepi.csv']
+    Zscore_files = [f'{tmp_out_dir}/FilteredPvalues_epi.csv', f'{tmp_out_dir}/FilteredPvalues_nonepi.csv']
+    query_files = [f'{tmp_out_dir}/query_flanks_epi.csv', f'{tmp_out_dir}/query_flanks_nonepi.csv']
 
     for i in range(len(query_files)):
-        feature_matrix(dPSI_Mval_files[i], Zscore_files[i], query_files[i])
+        feature_matrix(dPSI_Mval_files[i], Zscore_files[i], query_files[i], proc)
 
 
-
-
-
+if __name__ == "__main__":    
+      p = get_argument_parser()
+      args = p.parse_args()
+      main(args)

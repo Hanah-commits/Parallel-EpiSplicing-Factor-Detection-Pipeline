@@ -1,11 +1,21 @@
 import os
 import json
+from argparse import ArgumentParser
 
+# Get the process name, use it in the output directory
+
+p = ArgumentParser()
+p.add_argument("--process", "-p",
+    help="The name of the process")
+
+args = p.parse_args()
+proc = args.process
 
 # STEP 1: Run RBPmap
 
 with open('paths.json') as f:
-            d = json.load(f)
+            data = json.load(f)
+d = data[proc]
 
 rbp_path = d["RBPmap directory"]
 
