@@ -21,7 +21,7 @@ ref = d['Reference genome']
 fasta = d['Reference fasta']
 
 # exon coordinates
-os.system('bash PreProcessing/get_exons.sh')
+os.system(f'bash PreProcessing/get_exons.sh {proc}')
 
 # genome file
 ref_genome= fasta+".fai"

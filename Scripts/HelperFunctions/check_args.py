@@ -8,12 +8,14 @@ import shutil
 def check_args():
 
     with open('paths.json') as f:
-        d = json.load(f)
+        data = json.load(f)
 
-    procs = d["list_of_processes"]
+    procs = data["list_of_processes"]
     output_dirs = []
 
     for proc in procs:
+
+        d = data[proc]
 
         args = {
         "RNASeq files" : d['RNASeq files'],
@@ -68,7 +70,7 @@ def check_args():
 
         
         # check if temp directories already exist
-        temp_dirs = ['0_Files/', '../RBPmap/']
+        temp_dirs = [f'{proc}_0_Files/', '../RBPmap/']
         for dir in temp_dirs:
             if os.path.exists(dir):
                 # temp dir not empty
@@ -80,13 +82,14 @@ def check_args():
 
 
         # create custome output directory process_tissue1_tissue2_timestamp
-        output_dir = str(Path(os.getcwd()).parent.absolute()) + "/Output/"+ proc+ args["tissue1"]+ "_" + args["tissue2"]+ "_" + str(time.time()) +"/"
+        output_dir = str(Path(os.getcwd()).parent.absolute()) + "/Output/"+ proc + "_" +  args["tissue1"]+ "_" + args["tissue2"]+ "_" + str(time.time()) +"/"
         Path(output_dir).mkdir(parents=True, exist_ok=True)
         output_dirs.append(output_dir)
 
 
-        with open('paths.json', 'w') as fp:
-            json.dump(args, fp)
+        # TODO: uncomment the lines!!!
+        # with open('paths.json', 'w') as fp:
+        #     json.dump(args, fp)
 
         # copy input arguments (paths.json) to output_dir
         shutil.copyfile('paths.json', output_dir+'paths.json')
@@ -95,5 +98,6 @@ def check_args():
 
 
 def move_dirs(output_dir, proc):
+    # TODO uncomment!!
     shutil.move(f'{proc}_0_Files/', output_dir)
-    shutil.move('../RBPmap/', output_dir)
+    # shutil.move('../RBPmap/', output_dir)
