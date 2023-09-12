@@ -43,21 +43,21 @@ def master_function(proc, output_dir):
         move_dirs(output_dir, proc)
         sys.exit(1)
 
-    # # STEP 2: Execute MANorm -  Differential Histone Modifications
-    # try:
-    #     os.system(f"python 2_MANorm/manorm_all.py {output_dir} -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 2: Execute MANorm -  Differential Histone Modifications
+    try:
+        os.system(f"python 2_MANorm/manorm_all.py {output_dir} -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
-    # # STEP 3: Process MAJIQ output
-    # try:
-    #     os.system(f"python 1_MAJIQ/post-MAJIQ.py {output_dir} -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 3: Process MAJIQ output
+    try:
+        os.system(f"python 1_MAJIQ/post-MAJIQ.py {output_dir} -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
     # # STEP 4: BEDTools - Annotate exon flanks with MAJIQ junctions
     # try:

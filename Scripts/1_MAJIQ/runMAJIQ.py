@@ -26,9 +26,6 @@ def main(args):
 
 
       currdir = os.getcwd()
-
-      print(f'OUTPUT DIR IS {args.output_dir}')
-      print(f'MAJIQ CONFIG IS {config}')
       
       output = args.output_dir + 'MAJIQ/'
       build_output = output+'build/'
@@ -43,38 +40,36 @@ def main(args):
       # switch to the directory with the bam files
       os.chdir(majiq_files)
 
-      print(os.listdir())
-
       # Detect Splice Variations
       os.system('majiq build ' + ref + ' -j ' + threads + ' -o '+build_output + ' -c ' + config + ' --disable-ir')
 
       # collect .majiq files
-      # all_files = []
-      # for file in os.listdir(build_output):
-      #       if file.endswith(".majiq"):
-      #             all_files.append(file)      
+      all_files = []
+      for file in os.listdir(build_output):
+            if file.endswith(".majiq"):
+                  all_files.append(file)      
 
-      # tissue1_files = [os.path.join(build_output, file) for file in all_files if tissue1 in file]
-      # tissue2_files = [os.path.join(build_output, file) for file in all_files if tissue2 in file]
+      tissue1_files = [os.path.join(build_output, file) for file in all_files if tissue1 in file]
+      tissue2_files = [os.path.join(build_output, file) for file in all_files if tissue2 in file]
 
 
-      # tissue1_count = len(tissue1_files)
-      # tissue2_count = len(tissue2_files)
+      tissue1_count = len(tissue1_files)
+      tissue2_count = len(tissue2_files)
 
-      # tissue1_files = " ".join(tissue1_files)
-      # tissue2_files = " ".join(tissue2_files)
+      tissue1_files = " ".join(tissue1_files)
+      tissue2_files = " ".join(tissue2_files)
 
-      # # Quantify Splice Variation
-      # os.system('majiq psi ' + tissue1_files + ' -j '+ str(tissue1_count) + ' -o '+ tissue1_output + ' -n ' + tissue1)
-      # os.system('majiq psi '+ tissue2_files + ' -j '+ str(tissue2_count) + ' -o '+ tissue2_output + ' -n ' + tissue2)
+      # Quantify Splice Variation
+      os.system('majiq psi ' + tissue1_files + ' -j '+ str(tissue1_count) + ' -o '+ tissue1_output + ' -n ' + tissue1)
+      os.system('majiq psi '+ tissue2_files + ' -j '+ str(tissue2_count) + ' -o '+ tissue2_output + ' -n ' + tissue2)
 
-      # # Quantify Differential Splice Variation
-      # os.system('majiq deltapsi -grp1 ' + tissue1_files + ' -grp2 ' + tissue2_files + ' -j ' + threads + ' -o ' + deltapsi_output + ' -n ' + tissue1 + ' ' + tissue2)
+      # Quantify Differential Splice Variation
+      os.system('majiq deltapsi -grp1 ' + tissue1_files + ' -grp2 ' + tissue2_files + ' -j ' + threads + ' -o ' + deltapsi_output + ' -n ' + tissue1 + ' ' + tissue2)
 
-      # os.chdir(currdir)
+      os.chdir(currdir)
 
-      # # Obtain tsv file
-      # os.system('voila tsv ' + build_output + 'splicegraph.sql ' + deltapsi_output + tissue1+'-'+tissue2 +'.deltapsi.voila' +' -f ' + output + 'majiq_output')
+      # Obtain tsv file
+      os.system('voila tsv ' + build_output + 'splicegraph.sql ' + deltapsi_output + tissue1+'-'+tissue2 +'.deltapsi.voila' +' -f ' + output + 'majiq_output')
 
 
 if __name__ == "__main__":    
