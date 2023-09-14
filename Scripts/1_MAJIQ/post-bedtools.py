@@ -5,6 +5,8 @@ from argparse import ArgumentParser
 
 # Get the process name, use it in the output directory
 
+print('STEP 5 is in progress')
+
 p = ArgumentParser()
 p.add_argument("--process", "-p",
 help="The name of the process")

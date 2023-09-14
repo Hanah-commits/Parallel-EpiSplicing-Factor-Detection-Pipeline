@@ -41,6 +41,7 @@ def p_adjust_bh(p):
     q = np.minimum(1, np.minimum.accumulate(steps * p[by_descend]))
     return q[by_orig]
 
+print("STEP 7")
 
 prefix = args.output_dir + 'MANorm/'
 

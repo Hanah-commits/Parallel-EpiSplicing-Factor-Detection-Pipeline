@@ -13,6 +13,8 @@ tmp_out_dir = proc + '_0_Files'
 
 flanks = [50,100,200]
 
+print("STEP 4 is in progress")
+
 for flank in flanks:
 
     os.system('bedtools intersect -loj -s -a ' + f'{tmp_out_dir}/flanks' + str(flank) +f'.bed -b {tmp_out_dir}/majiq.bed | sort | uniq > {tmp_out_dir}/majiq_flanks' + str(flank) + '.bed')

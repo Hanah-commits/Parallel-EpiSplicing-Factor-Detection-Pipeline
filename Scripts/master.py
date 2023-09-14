@@ -35,7 +35,7 @@ def master_function(proc, output_dir):
         move_dirs(output_dir, proc)
         sys.exit(1)
 
-    # # STEP 1: Execute MAJIQ - Differential Exon Usage
+    # STEP 1: Execute MAJIQ - Differential Exon Usage
     try:
         os.system(f"python 1_MAJIQ/runMAJIQ.py {output_dir} -p {proc}")
     except Exception as ex:
@@ -59,61 +59,61 @@ def master_function(proc, output_dir):
         move_dirs(output_dir, proc)
         sys.exit(1)
 
-    # # STEP 4: BEDTools - Annotate exon flanks with MAJIQ junctions
-    # try:
-    #     os.system(f"1_MAJIQ/annotate-MAJIQ.py -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 4: BEDTools - Annotate exon flanks with MAJIQ junctions
+    try:
+        os.system(f"python 1_MAJIQ/annotate-MAJIQ.py -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
-    # # STEP 5: Process BEDTools output
-    # try:
-    #     os.system(f"1_MAJIQ/post-bedtools.py -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 5: Process BEDTools output
+    try:
+        os.system(f"python 1_MAJIQ/post-bedtools.py -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
-    # # STEP 6: BEDTools - Annotate exon flanks with MANorm peaks
-    # try:
-    #     os.system(f'python 2_MANorm/annotate-MANorm.py {output_dir} -p {proc}')
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 6: BEDTools - Annotate exon flanks with MANorm peaks
+    try:
+        os.system(f'python 2_MANorm/annotate-MANorm.py {output_dir} -p {proc}')
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
-    # # STEP 7: Process peak-annotated flanks
-    # try:
-    #     os.system(f"python 2_MANorm/post-manorm.py {output_dir} -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 7: Process peak-annotated flanks
+    try:
+        os.system(f"python 2_MANorm/post-manorm.py {output_dir} -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
-    # # STEP 8: DEU - DHM Correlation
-    # try:
-    #     os.system(f"3_Episplicing/correlation.py -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 8: DEU - DHM Correlation
+    try:
+        os.system(f"python 3_Episplicing/correlation.py -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
-    # # STEP 9: Prepare RBPmap input
-    # try:
-    #     os.system(f"4_RBPMap/pre-rbp.py -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 9: Prepare RBPmap input
+    try:
+        os.system(f"python 4_RBPMap/pre-rbp.py -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
-    # # STEP 10: Execute RBPmap
-    # try:
-    #     os.system(f"4_RBPMap/run_rbpmap.py -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 10: Execute RBPmap
+    try:
+        os.system(f"python 4_RBPMap/run_rbpmap.py -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
     # # STEP 11: Process RBPMap output
     # try:

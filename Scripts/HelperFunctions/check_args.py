@@ -98,6 +98,5 @@ def check_args():
 
 
 def move_dirs(output_dir, proc):
-    # TODO uncomment!!
     shutil.move(f'{proc}_0_Files/', output_dir)
     # shutil.move('../RBPmap/', output_dir)

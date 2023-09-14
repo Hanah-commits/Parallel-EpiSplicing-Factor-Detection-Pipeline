@@ -12,6 +12,8 @@ p.add_argument("--process", "-p",
 args = p.parse_args()
 proc = args.process
 
+print("STEP 6")
+
 with open('paths.json') as f:
     data = json.load(f)
 d = data[proc]
