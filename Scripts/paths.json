@@ -6,14 +6,14 @@
 	"Histone modifications": [
 		"H3K27ac"
 	],
-	"RNASeq files": "/home/marina/marina_test/rnaseq/",
+	"RNASeq files": "/home/marinas/marina_test/rnaseq/",
 	"strandedness":"1",
-	"ChIPSeq files": "/home/marina/marina_test/chipseq/",
-	"Reference genome": "/home/marina/marina_test/reference/gencode_v24_chr21.gff3",
-	"Reference fasta": "/home/marina/marina_test/reference/GRCh38_chr21.fa",
+	"ChIPSeq files": "/home/marinas/marina_test/chipseq/",
+	"Reference genome": "/home/marinas/marina_test/reference/gencode_v24_chr21.gff3",
+	"Reference fasta": "/home/marinas/marina_test/reference/GRCh38_chr21.fa",
 	"threads":"2",
-	"MAJIQ config": "/home/marina/marina_test/majiq_config.txt",
-	"RBPmap directory": "/home/marina/rbpmap",
+	"MAJIQ config": "/home/marinas/marina_test/majiq_config.txt",
+	"RBPmap directory": "/home/marinas/rbpmap",
 	"Pipeline output":""
 },
 "pr2":{
@@ -22,14 +22,14 @@
 	"Histone modifications": [
 		"H3K27ac"
 	],
-	"RNASeq files": "/home/marina/marina_test/rnaseq/",
+	"RNASeq files": "/home/marinas/marina_test/rnaseq/",
 	"strandedness":"1",
-	"ChIPSeq files": "/home/marina/marina_test/chipseq/",
-	"Reference genome": "/home/marina/marina_test/reference/gencode_v24_chr21.gff3",
-	"Reference fasta": "/home/marina/marina_test/reference/GRCh38_chr21.fa",
+	"ChIPSeq files": "/home/marinas/marina_test/chipseq/",
+	"Reference genome": "/home/marinas/marina_test/reference/gencode_v24_chr21.gff3",
+	"Reference fasta": "/home/marinas/marina_test/reference/GRCh38_chr21.fa",
 	"threads":"2",
-	"MAJIQ config": "/home/marina/marina_test/majiq_config.txt",
-	"RBPmap directory": "/home/marina/rbpmap",
+	"MAJIQ config": "/home/marinas/marina_test/majiq_config.txt",
+	"RBPmap directory": "/home/marinas/rbpmap",
 	"Pipeline output":""
 }
 }

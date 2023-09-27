@@ -70,7 +70,7 @@ def check_args():
 
         
         # check if temp directories already exist
-        temp_dirs = [f'{proc}_0_Files/', '../RBPmap/']
+        temp_dirs = [f'{proc}_0_Files/', f'../{proc}_RBPmap/']
         for dir in temp_dirs:
             if os.path.exists(dir):
                 # temp dir not empty
@@ -99,4 +99,4 @@ def check_args():
 
 def move_dirs(output_dir, proc):
     shutil.move(f'{proc}_0_Files/', output_dir)
-    shutil.move('../RBPmap/', output_dir)
+    shutil.move(f'../{proc}_RBPmap/', output_dir)

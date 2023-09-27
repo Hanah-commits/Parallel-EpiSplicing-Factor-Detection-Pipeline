@@ -115,13 +115,13 @@ def master_function(proc, output_dir):
         move_dirs(output_dir, proc)
         sys.exit(1)
 
-    # # STEP 11: Process RBPMap output
-    # try:
-    #     os.system(f"4_RBPMap/post-rbp.py -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 11: Process RBPMap output
+    try:
+        os.system(f"4_RBPMap/post-rbp.py -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
     # try:    
     #     os.system(f"5_Classification/rbp_pvals.py -p {proc}")

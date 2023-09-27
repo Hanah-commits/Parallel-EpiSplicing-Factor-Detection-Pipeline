@@ -26,7 +26,7 @@ input_files = []
 n = 0
 i = 1
 while n < len(epi_flanks):
-        name = '../RBPmap/rbp_input_epi'+str(i)+'.csv'
+        name = f'../{proc}_RBPmap/rbp_input_epi'+str(i)+'.csv'
         input_files.append(name)
         if n+5000 <= len(epi_flanks):
                 epi_flanks[['seqid', 'flanks', 'strand']].iloc[n:n+5000].to_csv(name, index=False, sep=':', header=False)
@@ -40,7 +40,7 @@ while n < len(epi_flanks):
 n = 0
 i = 1
 while n < len(nonepi_flanks):
-        name = '../RBPmap/rbp_input_nonepi'+str(i)+'.csv'
+        name = f'../{proc}_RBPmap/rbp_input_nonepi'+str(i)+'.csv'
         input_files.append(name)
         if n+5000 <= len(nonepi_flanks):
                 nonepi_flanks[['seqid', 'flanks', 'strand']].iloc[n:n+5000].to_csv(name, index=False, sep=':', header=False)
@@ -55,6 +55,6 @@ epi_flanks[['gene_id', 'flanks']].to_csv(f'{tmp_out_dir}/query_flanks_epi.csv', 
 nonepi_flanks[['gene_id', 'flanks']].to_csv(f'{tmp_out_dir}/query_flanks_nonepi.csv', sep='\t', index=False)
 
 input_files = [os.getcwd() + '/' + file for file in input_files]
-with open('../RBPmap/input.txt', 'w') as f:
+with open(f'../{proc}_RBPmap/input.txt', 'w') as f:
     for item in input_files:
         f.write("%s\n" % item)

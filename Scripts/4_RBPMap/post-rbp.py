@@ -147,7 +147,7 @@ def process_results(result_dirs, type, proc):
 
 def main(args):
     proc = args.process
-    path = '../RBPmap'
+    path = f'../{proc}_RBPmap'
     results_dirs = [x[0] for x in os.walk(path)]
     epi_dirs = [p for p in results_dirs if 'resultsrbp_input_epi' in p and 'sequence' in p]
     nonepi_dirs = [p for p in results_dirs if 'resultsrbp_input_nonepi' in p and 'sequence' in p]
