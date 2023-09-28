@@ -117,28 +117,28 @@ def master_function(proc, output_dir):
 
     # STEP 11: Process RBPMap output
     try:
-        os.system(f"4_RBPMap/post-rbp.py -p {proc}")
+        os.system(f"python 4_RBPMap/post-rbp.py -p {proc}")
     except Exception as ex:
         print(ex)
         move_dirs(output_dir, proc)
         sys.exit(1)
 
-    # try:    
-    #     os.system(f"5_Classification/rbp_pvals.py -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    try:    
+        os.system(f"python 5_Classification/rbp_pvals.py -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
-    # # STEP 12: Add logFC weights to binding scores from RBPMap
-    # if weights:
-    #     try:
-    #         os.system(f"PreProcessing/get_weights.py -p {proc}")
-    #         os.system(f"4_RBPMap/rbp-weights.py -p {proc}")
-    #     except Exception as ex:
-    #         print(ex)
-    #         move_dirs(output_dir, proc)
-    #         sys.exit(1)
+    # STEP 12: Add logFC weights to binding scores from RBPMap
+    if weights:
+        try:
+            os.system(f"python PreProcessing/get_weights.py -p {proc}")
+            os.system(f"python 4_RBPMap/rbp-weights.py -p {proc}")
+        except Exception as ex:
+            print(ex)
+            move_dirs(output_dir, proc)
+            sys.exit(1)
 
     # # STEP 13: Prep Feature Matrix
     # try:
