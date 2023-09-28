@@ -13,7 +13,7 @@ def get_argument_parser():
     return p
 
 
-def feature_matrix(filename1, filename2, filename3, output_dir, proc, weighted=False):
+def feature_matrix(filename1, filename2, filename3, output_dir, proc, i, weighted=False):
 
     prefix = f'{proc}_0_Files/'
     features = pd.read_csv(prefix+filename1, delimiter='\t')
@@ -79,12 +79,12 @@ def main(args):
     query_files = ['query_flanks_epi.csv', 'query_flanks_nonepi.csv']
 
     for i in range(len(query_files)):
-        feature_matrix(dPSI_Mval_files[i], Zscore_files[i], query_files[i], output_dir, proc, weighted=False)
+        feature_matrix(dPSI_Mval_files[i], Zscore_files[i], query_files[i], output_dir, proc, i, weighted=False)
 
     if weights:
         
         for i in range(len(query_files)):
-            feature_matrix(dPSI_Mval_files[i], logFCZscore_files[i], query_files[i], output_dir, proc, weighted=True)
+            feature_matrix(dPSI_Mval_files[i], logFCZscore_files[i], query_files[i], output_dir, proc, i, weighted=True)
 
 
 if __name__ == "__main__":    

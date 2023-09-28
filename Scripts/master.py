@@ -140,28 +140,28 @@ def master_function(proc, output_dir):
             move_dirs(output_dir, proc)
             sys.exit(1)
 
-    # # STEP 13: Prep Feature Matrix
-    # try:
-    #     os.system(f"python 5_Classification/features.py {output_dir} {str(weights)} -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 13: Prep Feature Matrix
+    try:
+        os.system(f"python 5_Classification/features.py {output_dir} {str(weights)} -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
-    # try: 
-    #     os.system(f"python 5_Classification/classifier_features.py {output_dir} {str(weights)} -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    try: 
+        os.system(f"python 5_Classification/classifier_features.py {output_dir} {str(weights)} -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
-    # # STEP 14: Binary Classification
-    # try:
-    #     os.system(f"python 5_Classification/classifier.py {output_dir} -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 14: Binary Classification
+    try:
+        os.system(f"python 5_Classification/classifier.py {output_dir} -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
     # # STEP 15: Enrichment
     # try:

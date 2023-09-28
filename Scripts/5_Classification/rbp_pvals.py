@@ -10,7 +10,7 @@ def get_argument_parser():
     return p
 
 
-def feature_matrix(filename1, filename2, filename3, proc, weighted=False):
+def feature_matrix(filename1, filename2, filename3, proc, i, weighted=False):
     features = pd.read_csv(filename1, delimiter='\t')
     features.fillna(0, inplace=True)  # non-epigene flanks with no annotated peaks
     
@@ -55,7 +55,7 @@ def main(args):
     query_files = [f'{tmp_out_dir}/query_flanks_epi.csv', f'{tmp_out_dir}/query_flanks_nonepi.csv']
 
     for i in range(len(query_files)):
-        feature_matrix(dPSI_Mval_files[i], Zscore_files[i], query_files[i], proc)
+        feature_matrix(dPSI_Mval_files[i], Zscore_files[i], query_files[i], proc, i)
 
 
 if __name__ == "__main__":    
