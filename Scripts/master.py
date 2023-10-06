@@ -163,13 +163,13 @@ def master_function(proc, output_dir):
         move_dirs(output_dir, proc)
         sys.exit(1)
 
-    # # STEP 15: Enrichment
-    # try:
-    #     os.system(f"python 6_Enrichment/enrichment.py {output_dir} -p {proc}")
-    # except Exception as ex:
-    #     print(ex)
-    #     move_dirs(output_dir, proc)
-    #     sys.exit(1)
+    # STEP 15: Enrichment
+    try:
+        os.system(f"python 6_Enrichment/enrichment.py {output_dir} -p {proc}")
+    except Exception as ex:
+        print(ex)
+        move_dirs(output_dir, proc)
+        sys.exit(1)
 
     # STEP 15: Move files generated from current pipeline run to
     move_dirs(output_dir, proc)
