@@ -20,7 +20,7 @@ def master_function(proc, output_dir):
     # Differential Expression Analysis
     if weights:
         try:
-            os.system(f"PreProcessing/featureCounts.py -p {proc}")
+            os.system(f"python PreProcessing/featureCounts.py -p {proc}")
             os.system(f"Rscript PreProcessing/Limma.R {proc}")
         except Exception as ex:
             print(ex)

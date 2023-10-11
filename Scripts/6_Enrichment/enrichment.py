@@ -6,21 +6,23 @@ from scipy import stats
 from argparse import ArgumentParser
 
 # Get the process name, use it in the output directory
-def get_argument_parser():
-    p = ArgumentParser()
-    p.add_argument("output_dir")
-    p.add_argument("--process", "-p",
-        help="The name of the process")
-    return p
 
-# So these lines are ignored when the script is called via os.system
-epi = pd.read_csv('0_Files/features_epi.csv', delimiter='\t')
-nonepi = pd.read_csv('0_Files/features_nonepi.csv', delimiter='\t')
+p = ArgumentParser()
+p.add_argument("output_dir")
+p.add_argument("--process", "-p",
+        help="The name of the process")
+
+args = p.parse_args()
+proc = args.process
+
+
+epi = pd.read_csv(f'{proc}_0_Files/features_epi.csv', delimiter='\t')
+nonepi = pd.read_csv(f'{proc}_0_Files/features_nonepi.csv', delimiter='\t')
 
 epi["label"] = "epi"
 nonepi["label"] = "nonepi"
 
-sfs = pd.read_csv('0_Files/impt_features.csv', delimiter='\t')['Unnamed: 0'].values.tolist()
+sfs = pd.read_csv(f'{proc}_0_Files/impt_features.csv', delimiter='\t')['Unnamed: 0'].values.tolist()
 
 # RBPs with no binding site in any flank
 all_zero = []
@@ -35,7 +37,8 @@ for column in nonepi:  # iterates by-name
 sfs = [sf for sf in sfs if sf not in all_zero]
 
 with open('paths.json') as f:
-    d = json.load(f)
+    data = json.load(f)
+d = data[proc]
 
 hms = d["Histone modifications"]
 
@@ -79,7 +82,7 @@ def p_adjust_bh(p):
     return q[by_orig]
 
 
-def significane_test(test, proc):
+def significane_test(test):
 
     prob_dict = {}
     # sfs = ['BRUNOL4', 'BRUNOL5', 'BRUNOL6', 'DAZAP1', 'ESRP2', 'FMR1', 'FUS', 'FXR1', 'FXR2', 'HNRNPA1', 'HNRNPA1L2', 'HNRNPA2B1', 'HNRNPC', 'HNRNPF', 'HNRNPH1', 'HNRNPH2', 'HNRNPK', 'HNRNPL', 'HNRNPM', 'HNRNPU', 'HuR', 'KHDRBS1', 'KHDRBS2', 'KHDRBS3', 'MBNL1', 'PABPC1', 'PABPN1', 'PCBP1', 'PCBP2', 'QKI', 'RALY', 'RBFOX1', 'RBM24', 'RBM28', 'RBM3', 'RBM4', 'RBM42', 'RBM5', 'RBM8A', 'SART3', 'SFPQ', 'SNRNP70', 'SNRPA', 'SRSF1', 'SRSF10', 'SRSF2', 'SRSF7', 'SRSF9', 'TARDBP', 'TIA1', 'U2AF2', 'YBX1', 'ZC3H10', 'ZCRB1', 'ZNF638']
@@ -337,6 +340,5 @@ def significane_test(test, proc):
 
 
 if __name__ == "__main__":
-    p = get_argument_parser()
-    args = p.parse_args()
+    
     significane_test("welch")

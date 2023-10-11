@@ -13,23 +13,21 @@
 	"Reference fasta": "/home/marinas/marina_test/reference/GRCh38_chr21.fa",
 	"threads":"2",
 	"MAJIQ config": "/home/marinas/marina_test/majiq_config.txt",
-	"RBPmap directory": "/home/marinas/rbpmap",
-	"Pipeline output":""
+	"RBPmap directory": "/home/marinas/rbpmap"
 },
 "pr2":{
+	"RNASeq files": "/home/marinas/marina_test/chr22/rnaseq/",
+	"Reference genome": "/home/marinas/marina_test/chr22/reference/gencode.v24.chr22.gff3",
+	"Reference fasta": "/home/marinas/marina_test/chr22/reference/GRCh38_chr22.fa",
 	"tissue1": "ectodermal",
 	"tissue2": "mesodermal",
 	"Histone modifications": [
-		"H3K27ac"
+    	"H3K4me3"
 	],
-	"RNASeq files": "/home/marinas/marina_test/rnaseq/",
-	"strandedness":"1",
-	"ChIPSeq files": "/home/marinas/marina_test/chipseq/",
-	"Reference genome": "/home/marinas/marina_test/reference/gencode_v24_chr21.gff3",
-	"Reference fasta": "/home/marinas/marina_test/reference/GRCh38_chr21.fa",
-	"threads":"2",
-	"MAJIQ config": "/home/marinas/marina_test/majiq_config.txt",
+	"ChIPSeq files": "/home/marinas/marina_test/chr22/chipseq/",
+	"MAJIQ config": "/home/marinas/marina_test/chr22/majiq_config_chr22.txt",
 	"RBPmap directory": "/home/marinas/rbpmap",
-	"Pipeline output":""
+	"threads": "2",
+	"strandedness":"1"
 }
 }
