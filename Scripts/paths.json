@@ -19,7 +19,7 @@
 	"RNASeq files": "/home/marinas/marina_test/chr22/rnaseq/",
 	"Reference genome": "/home/marinas/marina_test/chr22/reference/gencode.v24.chr22.gff3",
 	"Reference fasta": "/home/marinas/marina_test/chr22/reference/GRCh38_chr22.fa",
-	"tissue1": "ectodermal",
+	"tissue1": "endodermal",
 	"tissue2": "mesodermal",
 	"Histone modifications": [
     	"H3K4me3"
