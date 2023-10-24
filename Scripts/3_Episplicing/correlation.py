@@ -148,7 +148,7 @@ def main(args):
     # internal column filtering
     coeff.to_csv(f'{tmp_out_dir}/coeff.csv', sep='\t')
     coeff = pd.read_csv(f'{tmp_out_dir}/coeff.csv', delimiter='\t')
-    coeff.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True)
+    coeff.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True, errors='ignore')
     
     # dropping p-values of hm-hm correlations
     coeff = coeff.iloc[::5, :]
@@ -171,7 +171,7 @@ def main(args):
     # internal column filtering
     pval.to_csv(f'{tmp_out_dir}/pvals.csv', sep='\t')
     pval = pd.read_csv(f'{tmp_out_dir}/pvals.csv', delimiter='\t')
-    pval.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True)
+    pval.drop(['Unnamed: 1', 'mean_dpsi_per_lsv_junction'], axis=1, inplace=True, errors='ignore')
 
     # dropping p-values of hm-hm correlations
     pval = pval.iloc[::5, :]
