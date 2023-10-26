@@ -13,6 +13,8 @@ def check_args():
     procs = data["list_of_processes"]
     output_dirs = []
 
+    new_paths_file = {"list_of_processes":data["list_of_processes"]}
+
     for proc in procs:
 
         d = data[proc]
@@ -27,7 +29,8 @@ def check_args():
         "ChIPSeq files" : d["ChIPSeq files"],
         "MAJIQ config" : d["MAJIQ config"],
         "RBPmap directory" : d["RBPmap directory"],
-        "threads" : d['threads']
+        "threads" : d['threads'],
+        "strandedness": int(d['strandedness'])
         }
 
         #check histone modifications & tissue names
@@ -80,19 +83,19 @@ def check_args():
                 #create temp dir
                 Path(dir).mkdir(parents=True, exist_ok=True)
 
-
         # create custome output directory process_tissue1_tissue2_timestamp
         output_dir = str(Path(os.getcwd()).parent.absolute()) + "/Output/"+ proc + "_" +  args["tissue1"]+ "_" + args["tissue2"]+ "_" + str(time.time()) +"/"
         Path(output_dir).mkdir(parents=True, exist_ok=True)
         output_dirs.append(output_dir)
 
+        new_paths_file[proc] = args
 
-        # TODO: uncomment the lines!!!
-        # with open('paths.json', 'w') as fp:
-        #     json.dump(args, fp)
+    
+    with open('paths.json', 'w') as fp:
+            json.dump(new_paths_file, fp)
 
-        # copy input arguments (paths.json) to output_dir
-        shutil.copyfile('paths.json', output_dir+'paths.json')
+    # copy input arguments (paths.json) to output_dir
+    shutil.copyfile('paths.json', output_dir+'paths.json')
 
     return procs, output_dirs
 

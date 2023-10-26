@@ -9,7 +9,7 @@ my $timestamp = time;
 ########### MAIN PATHs - UPDATE IF NEEDED ######################################
 BEGIN {
 	$scripts_dir = "~/RBPmap_1.2/"; ## The main directory of RBPmap scripts and modules
-	$results_dir = "~/EpiSplicing-Factor-Detection-Pipeline/RBPmap/results" . basename($ARGV[1]); ## The main directory in which the results will be created. Chmod this directory 777 to enable writing permissions.
+	$results_dir = "~/EpiSplicing-Factor-Detection-Pipeline/RBPmap/results" . $ARGV[0] . basename($ARGV[2]); ## The main directory in which the results will be created. Chmod this directory 777 to enable writing permissions.
 }
 ################################################################################
 ## MySQL connection definitions - UPDATE IF NEEDED: 
@@ -122,6 +122,7 @@ print LOG "-------------------\n\n";
 
 #################################################
 ### Getting the parameters from the command line
+my $proc = shift;
 my $parameters = join (' ', @ARGV);
 &parse_parameters($parameters);
 	
