@@ -4,18 +4,18 @@ library(jsonlite)
 
 args = commandArgs(trailingOnly=TRUE)
 if (length(args)==0) {
-  stop("At least one argument must be supplied (input file).n", call.=FALSE)
+  stop("Process name must be supplied", call.=FALSE)
 } 
 
 proc = args[1]
 
 json_data <- fromJSON("paths.json") 
-json_data <- lapply(json_data, function(x) {
+proc_json_data <- json_data[[proc]]
+
+proc_json_data <- lapply(proc_json_data, function(x) {
   x[sapply(x, is.null)] <- NA
   unlist(x)
 })
-
-proc_json_data <- json_data$proc
 
 do.call("rbind", proc_json_data)
 
