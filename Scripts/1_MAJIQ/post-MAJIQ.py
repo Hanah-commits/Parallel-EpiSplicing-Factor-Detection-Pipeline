@@ -67,8 +67,7 @@ def main(args):
     # FILTER 2: Drop rows with changing probability > 0.05
     voila['pval'] = 1- pd.to_numeric(voila['probability_changing'])
     voila = adjust_pvalue(voila, col='pval')
-    # TODO: uncomment!!
-    # voila = voila[pd.to_numeric(voila['adj_pval']) <= 0.05]
+    voila = voila[pd.to_numeric(voila['adj_pval']) <= 0.05]
 
     # STEP 3: Get the source and target indices of splice junctions
     voila[['source', 'target']] = voila['junctions_coords'].str.split('-', 1, expand=True)
