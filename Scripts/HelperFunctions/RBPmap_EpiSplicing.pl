@@ -9,7 +9,7 @@ my $timestamp = time;
 ########### MAIN PATHs - UPDATE IF NEEDED ######################################
 BEGIN {
 	$scripts_dir = "~/RBPmap_1.2/"; ## The main directory of RBPmap scripts and modules
-	$results_dir = "~/EpiSplicing-Factor-Detection-Pipeline/RBPmap/results" . $ARGV[0] . basename($ARGV[2]); ## The main directory in which the results will be created. Chmod this directory 777 to enable writing permissions.
+	$results_dir = "~/EpiSplicing-Factor-Detection-Pipeline/" . $ARGV[0] . "_RBPmap/results" . basename($ARGV[2]); ## The main directory in which the results will be created. Chmod this directory 777 to enable writing permissions.
 }
 ################################################################################
 ## MySQL connection definitions - UPDATE IF NEEDED: 
