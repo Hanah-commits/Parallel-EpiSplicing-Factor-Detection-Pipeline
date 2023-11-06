@@ -94,8 +94,9 @@ def check_args():
     with open('paths.json', 'w') as fp:
             json.dump(new_paths_file, fp)
 
-    # copy input arguments (paths.json) to output_dir
-    shutil.copyfile('paths.json', output_dir+'paths.json')
+    for out_dir in output_dirs:
+        # copy input arguments (paths.json) to output_dir
+        shutil.copyfile('paths.json', out_dir+'paths.json')
 
     return procs, output_dirs
 
