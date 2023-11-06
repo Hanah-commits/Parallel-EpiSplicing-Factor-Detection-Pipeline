@@ -83,6 +83,13 @@ def check_args():
                 #create temp dir
                 Path(dir).mkdir(parents=True, exist_ok=True)
 
+        # check if log files already exist
+        log_file_name = f'{proc}_output.log'
+        try:
+            f = open(log_file_name, 'x')
+        except FileExistsError:
+            raise ValueError('Delete or move the log file to another location ' + log_file_name)
+
         # create custome output directory process_tissue1_tissue2_timestamp
         output_dir = str(Path(os.getcwd()).parent.absolute()) + "/Output/"+ proc + "_" +  args["tissue1"]+ "_" + args["tissue2"]+ "_" + str(time.time()) +"/"
         Path(output_dir).mkdir(parents=True, exist_ok=True)
@@ -104,3 +111,4 @@ def check_args():
 def move_dirs(output_dir, proc):
     shutil.move(f'{proc}_0_Files/', output_dir)
     shutil.move(f'../{proc}_RBPmap/', output_dir)
+    shutil.move(f'{proc}_output.log', output_dir)
