@@ -181,7 +181,7 @@ active_processes = []
 
 # Start the processes
 for pr, out_dir in zip(list_of_processes, output_dirs):
-    proc = Process(target=master_function, args=(pr, out_dir,))
+    proc = Process(target=master_function, args=(pr, out_dir,), daemon=True)
     active_processes.append(proc)
     proc.start()
 
